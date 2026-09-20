@@ -29,6 +29,7 @@ required = [
     "README.md",
     "docs/DESIGN.md",
     "docs/THREAT_MODEL.md",
+    "docs/FAILURE_MODES.md",
     "docs/COMPARISON.md",
     "plans/amendments/README.md",
     "spec/README.md",

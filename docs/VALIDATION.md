@@ -40,6 +40,14 @@ local evidence remains distinct from hosted-runtime and live acceptance.
 
 ## Live commissioning evidence
 
+The [operational failure model](FAILURE_MODES.md) and the corresponding
+AGENTS/MASTER_PROMPT rules were derived from commissioning observations. Source
+validation and packaging check that the documentation and portable guide copies
+are present and consistent. The existing executable contracts do not measure
+compliance with these working practices, and the historical live results below
+are not a before/after evaluation of their effect. Recurrence and cost reduction
+remain unmeasured; objective project-specific controls need their own validation.
+
 The private commissioning lab has independently verified these deployed flows:
 
 | Flow | Retained evidence |

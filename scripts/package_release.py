@@ -14,7 +14,7 @@ PUBLIC_FILES = (
     "README.md", "LICENSE", "VERSION", ".gitignore", "CONTRIBUTING.md",
     "RELEASE_CHECKLIST.md", "UNIVERSAL_PROJECT_GOVERNANCE_GUIDE.md",
     ".github/workflows/validate.yml", "docs/DESIGN.md", "docs/THREAT_MODEL.md",
-    "docs/COMPARISON.md", "docs/SOURCES.md", "docs/VALIDATION.md",
+    "docs/COMPARISON.md", "docs/SOURCES.md", "docs/VALIDATION.md", "docs/FAILURE_MODES.md",
     "spec/README.md", "plans/amendments/README.md",
     "examples/plan-amendments/PA-0001.md",
     "tests/fixtures/app-token-input-contract.json",

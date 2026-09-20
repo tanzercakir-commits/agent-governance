@@ -6,6 +6,15 @@ Coding-agent systems usually focus on **agent behavior**: plan first, test first
 
 `agent-governance` adds a second layer: **repository acceptance semantics**. The repository should be able to answer, from durable state, whether a specific change is eligible to advance.
 
+## Operational reliability
+
+Operational reliability complements acceptance semantics. The guide also tells
+implementers and verifiers to establish actual working context, record concise
+incidents, diagnose before repeating an operation and check every affected
+boundary of a correction. A retained working note helps prevent rediscovery; it
+is not trusted completion evidence. See the [failure model](FAILURE_MODES.md)
+for the scenarios, expected evidence and limits of instruction-only controls.
+
 ## Authority model
 
 ```text

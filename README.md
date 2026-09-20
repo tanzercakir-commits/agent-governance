@@ -92,6 +92,7 @@ Local reference tests do not establish live GitHub enforcement. See
 - [Complete specification](UNIVERSAL_PROJECT_GOVERNANCE_GUIDE.md)
 - [Design and trust boundaries](docs/DESIGN.md)
 - [Threat model and limitations](docs/THREAT_MODEL.md)
+- [Operational failure model and recurrence controls](docs/FAILURE_MODES.md)
 - [Design distinctions](docs/COMPARISON.md)
 - [Example plan amendment](examples/plan-amendments/PA-0001.md)
 - [Contributing](CONTRIBUTING.md)

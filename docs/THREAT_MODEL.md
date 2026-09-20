@@ -45,6 +45,22 @@ Assume an implementation agent may accidentally or strategically:
 | Later green hides terminal failure | Complete immutable attempt history + exact admitted producer |
 | Hidden priority bypass | Additive amendments append to back only |
 
+## Operational failure model
+
+Integrity failures can also originate in ordinary implementation and verification
+mistakes. The [operational failure model](FAILURE_MODES.md) covers wrong working
+context, incorrect provider assumptions, faulty verification expectations,
+incomplete fix coverage, ineffective repetition, unnecessary dependencies and
+insufficient diagnostics or publication hygiene.
+
+These scenarios threaten the usefulness of evidence, reliable progress and the
+confidentiality of private working data. Some exercise security boundaries already
+listed above; others are reliability failures without an adversary. The receiving
+AGENTS/MASTER_PROMPT templates require compact incident notes, verified premises
+before another attempt, affected-boundary coverage and scoped verification.
+Those process requirements supplement the existing gates; they neither implement
+new runtime enforcement here nor establish a measured reduction in recurrence.
+
 ## Contract precision
 
 `project_amendment` distinguishes pending queues from exact terminal regions and rejects malformed/mixed input. The same projection is used by the finalizer and all amendment validators. Sentinel mentions in the header are not terminal state. A structural self-check is not evidence of accepted completion.
