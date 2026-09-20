@@ -1,0 +1,35 @@
+name: validate
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  repository-contract:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          persist-credentials: false
+      - name: Record tested checkout
+        env:
+          EXPECTED_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
+        run: |
+          test "$(git rev-parse HEAD)" = "$EXPECTED_SHA"
+          git rev-parse HEAD HEAD^{tree}
+      - name: Verify generated guide copies
+        run: python3 scripts/build_guide.py --check
+      - name: Validate repository
+        run: python3 scripts/validate_repo.py
+      - name: Check source and executable contract regressions
+        run: python3 -m unittest discover -s tests -p 'test_*.py' -v
+      - name: Prove reviewed defects are detected
+        run: python3 scripts/check_mutations.py
+      - name: Verify distributable source and standalone skill
+        run: python3 scripts/package_release.py --output dist

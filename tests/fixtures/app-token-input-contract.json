@@ -1,0 +1,8 @@
+{
+  "repository": "actions/create-github-app-token",
+  "revision": "fee1f7d63c2ff003460e3d139729b119787bc349",
+  "source": "https://raw.githubusercontent.com/actions/create-github-app-token/fee1f7d63c2ff003460e3d139729b119787bc349/action.yml",
+  "required_inputs": ["app-id", "private-key"],
+  "used_optional_inputs": ["permission-contents", "permission-statuses", "skip-token-revoke"],
+  "unsupported_input": "client-id"
+}
