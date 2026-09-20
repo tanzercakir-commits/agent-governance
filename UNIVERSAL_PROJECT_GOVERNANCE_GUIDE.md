@@ -173,6 +173,18 @@ Read in full, in this order:
 - Material findings block completion. Fix them and request a fresh exact-head verification.
 - If independent agents are unavailable, perform and disclose a clearly separated second-pass audit.
 
+## Operational reliability
+
+- Verify the repository root, remote identity, branch/head and relevant paths before acting. Read the actual CI adapter and command prerequisites; discover filenames instead of guessing them. Recheck volatile facts after a checkout or context change.
+- Keep a compact working note with those facts, unresolved assumptions and links to existing evidence. Reuse an existing task note or a local ignored file; verify exclusion before storing private context. Notes never grant authorization or satisfy completion gates.
+- Check external interfaces at the pinned revision and with the intended credential role. Do not assume every token exposes the same fields or that an acknowledged write is immediately visible. Use only the protocol's permitted bounded readback.
+- Record each noticed mistake briefly: observed failure, impact, sanitized evidence, known cause or unknown, correction and any related earlier incident. Include verifier/helper mistakes; exclude expected negative tests. Preserve earlier entries and append resolutions. Never log credentials or private response bodies in public artifacts.
+- Before repeating a failed operation, identify the newly verified fact or concrete correction and whether repetition is permitted. Stop the unchanged affected action when neither exists; continue independent authorized work. An ambiguous remote write requires the existing read-only recovery path, never an invented retry or compensating write.
+- Before closing a fix, list the related callers, workflows, privileged entry points and consumers; explain which are affected. Verify the authorized affected boundaries together instead of rediscovering the same defect one entry point at a time. Use actual contracts and valid/invalid cases for tests and verifier expectations.
+- Plan verification by affected boundary. Avoid duplicate full audits when their evidence remains applicable; preserve attribution and perform focused checks for new findings. Follow the task lifecycle's exact-head and canonical-body invalidation rules: a new head needs its own evidence, and a substantive body change needs refreshed policy and verifier acceptance. A body-only change does not itself require rerunning an unchanged-source build whose evidence still qualifies. Efficiency never permits reuse of invalid completion evidence.
+- Check actual account, reviewer and permission prerequisites early. Use existing authorization; ask only for missing authority or inputs. Do not introduce unnecessary dependencies, weaken receiving controls, or expand scope outside the queue/amendment rules.
+- Before public release, inspect the reviewed artifact, reachable history, commit attribution and release/ref metadata. Report preparation, execution and accepted completion distinctly; claim only outcomes supported by retained evidence.
+
 ## Non-negotiable repository rules
 
 - `PLAN.md` is the immutable baseline plan after bootstrap merge. Never edit, reformat, rename, or regenerate it.
@@ -280,6 +292,24 @@ Runs only from code already present on the protected default branch. For ordinar
 14. Independently audit the ledger-only commit when risk warrants it.
 15. Merge through protected-branch rules.
 16. Verify post-merge project CI, main audit, queue front, progress record, and ruleset.
+
+## Failure recovery and verification work
+
+Follow the operational reliability rules in AGENTS.md for implementer and
+verifier work. After an unexpected failure, preserve a small sanitized diagnostic,
+read the actual affected state, and distinguish a product defect from an incorrect
+command, helper expectation, external behavior or an unknown cause. Before another
+attempt, state what verified premise changed and why the next action is allowed.
+Changing a command's spelling alone does not make an admitted operation retryable.
+
+Assign one independent verifier to the final full reconciliation and retain its
+attributed result. A later auxiliary-check failure calls for the affected check,
+unless it undermines the wider evidence. Refresh invalidated head/canonical-body
+evidence according to the task lifecycle, and perform all required post-merge/external gates. Diagnostic
+notes are not trusted attempt records and cannot mutate TODO/PROGRESS or the plan.
+If progress needs missing authority or an unavailable capability, report that
+specific blocker and continue independent authorized work; do not add an approval
+loop for routine corrections already within scope.
 
 ## Pull request metadata
 
