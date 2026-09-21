@@ -1,0 +1,265 @@
+name: release
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: "Release version without v; must exactly match VERSION"
+        required: true
+        type: string
+
+permissions:
+  contents: write
+  id-token: write
+  attestations: write
+
+concurrency:
+  group: release
+  cancel-in-progress: false
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    env:
+      RELEASE_VERSION: ${{ inputs.version }}
+
+    steps:
+      - name: Check out exact release source
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: ${{ github.sha }}
+          persist-credentials: false
+          fetch-depth: 0
+
+      - name: Verify release source and tooling
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+
+          test "$GITHUB_REF" = "refs/heads/main"
+          test "$(git rev-parse HEAD)" = "$GITHUB_SHA"
+          test "$(cat VERSION)" = "$RELEASE_VERSION"
+          grep -Eq '^[0-9]+\.[0-9]+\.[0-9]+(-[a-z0-9.]+)?$' VERSION
+
+          remote_main="$(git ls-remote origin refs/heads/main | awk '{print $1}')"
+          test "$remote_main" = "$GITHUB_SHA"
+
+          # Fail before any release mutation if the runner CLI cannot perform
+          # the provenance and immutable-release verification used below.
+          gh attestation verify --help >/dev/null
+          gh release verify --help >/dev/null
+          gh release verify-asset --help >/dev/null
+
+          tag="v${RELEASE_VERSION}"
+
+          if git ls-remote --exit-code origin "refs/tags/${tag}" >/dev/null 2>&1; then
+            echo "ERROR: tag already exists: ${tag}" >&2
+            exit 2
+          fi
+
+          if gh release view "${tag}" --repo "$GITHUB_REPOSITORY" >/dev/null 2>&1; then
+            echo "ERROR: release already exists: ${tag}" >&2
+            exit 2
+          fi
+
+      - name: Run full validation and package release
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          python3 scripts/build_guide.py --check
+          python3 scripts/validate_repo.py
+          python3 -m unittest discover -s tests -p 'test_*.py' -v
+          python3 scripts/check_mutations.py
+
+          rm -rf dist
+          python3 scripts/package_release.py --output dist
+
+          test -f "dist/agent-governance-${RELEASE_VERSION}.zip"
+          test -f "dist/project-governance-bootstrap-${RELEASE_VERSION}.zip"
+          test -f dist/SHA256SUMS
+
+          (
+            cd dist
+            sha256sum -c SHA256SUMS
+          )
+
+      - name: Generate build provenance attestations
+        id: provenance
+        uses: actions/attest@1e69f48acb82d1966a394da916b4c1698aa569d6 # v4.2.2
+        with:
+          subject-path: |
+            dist/agent-governance-${{ inputs.version }}.zip
+            dist/project-governance-bootstrap-${{ inputs.version }}.zip
+            dist/SHA256SUMS
+
+      - name: Verify build provenance before publication
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+          ATTESTATION_BUNDLE: ${{ steps.provenance.outputs.bundle-path }}
+        run: |
+          set -euo pipefail
+
+          for asset in \
+            "dist/agent-governance-${RELEASE_VERSION}.zip" \
+            "dist/project-governance-bootstrap-${RELEASE_VERSION}.zip" \
+            "dist/SHA256SUMS"
+          do
+            gh attestation verify "$asset" \
+              --repo "$GITHUB_REPOSITORY" \
+              --bundle "$ATTESTATION_BUNDLE" \
+              --signer-workflow "$GITHUB_REPOSITORY/.github/workflows/release.yml" \
+              --signer-digest "$GITHUB_SHA" \
+              --source-ref "$GITHUB_REF" \
+              --source-digest "$GITHUB_SHA"
+          done
+
+      - name: Create draft release and upload assets
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+
+          tag="v${RELEASE_VERSION}"
+
+          gh release create "$tag" \
+            "dist/agent-governance-${RELEASE_VERSION}.zip" \
+            "dist/project-governance-bootstrap-${RELEASE_VERSION}.zip" \
+            "dist/SHA256SUMS" \
+            --repo "$GITHUB_REPOSITORY" \
+            --draft \
+            --target "$GITHUB_SHA" \
+            --title "agent-governance ${tag}" \
+            --generate-notes \
+            --fail-on-no-commits
+
+      - name: Verify draft release before immutable publication
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+
+          tag="v${RELEASE_VERSION}"
+
+          test "$(
+            gh release view "$tag" \
+              --repo "$GITHUB_REPOSITORY" \
+              --json isDraft \
+              --jq '.isDraft'
+          )" = "true"
+
+          tag_sha="$(
+            gh api "/repos/${GITHUB_REPOSITORY}/git/ref/tags/${tag}" \
+              --jq '.object.sha'
+          )"
+          test "$tag_sha" = "$GITHUB_SHA"
+
+          expected="$(
+            printf '%s\n' \
+              "SHA256SUMS" \
+              "agent-governance-${RELEASE_VERSION}.zip" \
+              "project-governance-bootstrap-${RELEASE_VERSION}.zip" |
+              sort
+          )"
+
+          actual="$(
+            gh release view "$tag" \
+              --repo "$GITHUB_REPOSITORY" \
+              --json assets \
+              --jq '.assets[].name' |
+              sort
+          )"
+
+          test "$actual" = "$expected"
+
+          rm -rf downloaded-release
+          mkdir downloaded-release
+
+          gh release download "$tag" \
+            --repo "$GITHUB_REPOSITORY" \
+            --dir downloaded-release \
+            --pattern '*.zip' \
+            --pattern 'SHA256SUMS'
+
+          cmp dist/SHA256SUMS downloaded-release/SHA256SUMS
+
+          (
+            cd downloaded-release
+            sha256sum -c SHA256SUMS
+          )
+
+          remote_main="$(git ls-remote origin refs/heads/main | awk '{print $1}')"
+          test "$remote_main" = "$GITHUB_SHA"
+
+      - name: Publish immutable release
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+
+          tag="v${RELEASE_VERSION}"
+
+          gh release edit "$tag" \
+            --repo "$GITHUB_REPOSITORY" \
+            --draft=false \
+            --latest
+
+      - name: Verify published immutable release
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+
+          tag="v${RELEASE_VERSION}"
+
+          test "$(
+            gh release view "$tag" \
+              --repo "$GITHUB_REPOSITORY" \
+              --json isDraft \
+              --jq '.isDraft'
+          )" = "false"
+
+          immutable=false
+          for attempt in 1 2 3 4 5 6 7 8 9 10; do
+            immutable="$(
+              gh api "/repos/${GITHUB_REPOSITORY}/releases/tags/${tag}" \
+                --jq '.immutable // false'
+            )"
+
+            if test "$immutable" = "true"; then
+              break
+            fi
+
+            sleep 3
+          done
+
+          test "$immutable" = "true"
+
+          # GitHub's release attestation can become visible shortly after the
+          # immutable release itself. Verification is read-only, so bounded
+          # observation is safe here and never mutates or retries publication.
+          verified=false
+          for attempt in 1 2 3 4 5 6 7 8 9 10; do
+            if gh release verify "$tag" --repo "$GITHUB_REPOSITORY" &&
+               gh release verify-asset "$tag" "dist/agent-governance-${RELEASE_VERSION}.zip" \
+                 --repo "$GITHUB_REPOSITORY" &&
+               gh release verify-asset "$tag" "dist/project-governance-bootstrap-${RELEASE_VERSION}.zip" \
+                 --repo "$GITHUB_REPOSITORY" &&
+               gh release verify-asset "$tag" "dist/SHA256SUMS" \
+                 --repo "$GITHUB_REPOSITORY"
+            then
+              verified=true
+              break
+            fi
+
+            sleep 3
+          done
+
+          test "$verified" = "true"
