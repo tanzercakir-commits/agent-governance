@@ -17,6 +17,10 @@ class DistributionTests(unittest.TestCase):
             with ZipFile(first[0]) as archive:
                 names = archive.namelist()
                 self.assertTrue(any(name.endswith("/LICENSE") for name in names))
+                self.assertTrue(any(
+                    name.endswith("/.github/workflows/release.yml")
+                    for name in names
+                ))
                 for name in names:
                     self.assertFalse("/.git/" in name or "PREFLIGHT" in name or "REVIEW_003" in name)
                     self.assertNotIn("__pycache__", name)
