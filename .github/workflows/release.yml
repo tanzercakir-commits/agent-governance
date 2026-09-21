@@ -21,7 +21,6 @@ jobs:
   publish:
     runs-on: ubuntu-latest
     env:
-      GH_TOKEN: ${{ github.token }}
       RELEASE_VERSION: ${{ inputs.version }}
 
     steps:
@@ -32,8 +31,10 @@ jobs:
           persist-credentials: false
           fetch-depth: 0
 
-      - name: Verify release source
+      - name: Verify release source and tooling
         shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
         run: |
           set -euo pipefail
 
@@ -44,6 +45,12 @@ jobs:
 
           remote_main="$(git ls-remote origin refs/heads/main | awk '{print $1}')"
           test "$remote_main" = "$GITHUB_SHA"
+
+          # Fail before any release mutation if the runner CLI cannot perform
+          # the provenance and immutable-release verification used below.
+          gh attestation verify --help >/dev/null
+          gh release verify --help >/dev/null
+          gh release verify-asset --help >/dev/null
 
           tag="v${RELEASE_VERSION}"
 
@@ -91,6 +98,7 @@ jobs:
       - name: Verify build provenance before publication
         shell: bash
         env:
+          GH_TOKEN: ${{ github.token }}
           ATTESTATION_BUNDLE: ${{ steps.provenance.outputs.bundle-path }}
         run: |
           set -euo pipefail
@@ -104,12 +112,15 @@ jobs:
               --repo "$GITHUB_REPOSITORY" \
               --bundle "$ATTESTATION_BUNDLE" \
               --signer-workflow "$GITHUB_REPOSITORY/.github/workflows/release.yml" \
+              --signer-digest "$GITHUB_SHA" \
               --source-ref "$GITHUB_REF" \
               --source-digest "$GITHUB_SHA"
           done
 
       - name: Create draft release and upload assets
         shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
         run: |
           set -euo pipefail
 
@@ -128,6 +139,8 @@ jobs:
 
       - name: Verify draft release before immutable publication
         shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
         run: |
           set -euo pipefail
 
@@ -185,6 +198,8 @@ jobs:
 
       - name: Publish immutable release
         shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
         run: |
           set -euo pipefail
 
@@ -197,6 +212,8 @@ jobs:
 
       - name: Verify published immutable release
         shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
         run: |
           set -euo pipefail
 
@@ -210,30 +227,39 @@ jobs:
           )" = "false"
 
           immutable=false
-          for attempt in 1 2 3 4 5; do
+          for attempt in 1 2 3 4 5 6 7 8 9 10; do
             immutable="$(
-              gh release view "$tag" \
-                --repo "$GITHUB_REPOSITORY" \
-                --json isImmutable \
-                --jq '.isImmutable'
+              gh api "/repos/${GITHUB_REPOSITORY}/releases/tags/${tag}" \
+                --jq '.immutable // false'
             )"
 
             if test "$immutable" = "true"; then
               break
             fi
 
-            sleep 2
+            sleep 3
           done
 
           test "$immutable" = "true"
 
-          gh release verify "$tag" --repo "$GITHUB_REPOSITORY"
+          # GitHub's release attestation can become visible shortly after the
+          # immutable release itself. Verification is read-only, so bounded
+          # observation is safe here and never mutates or retries publication.
+          verified=false
+          for attempt in 1 2 3 4 5 6 7 8 9 10; do
+            if gh release verify "$tag" --repo "$GITHUB_REPOSITORY" &&
+               gh release verify-asset "$tag" "dist/agent-governance-${RELEASE_VERSION}.zip" \
+                 --repo "$GITHUB_REPOSITORY" &&
+               gh release verify-asset "$tag" "dist/project-governance-bootstrap-${RELEASE_VERSION}.zip" \
+                 --repo "$GITHUB_REPOSITORY" &&
+               gh release verify-asset "$tag" "dist/SHA256SUMS" \
+                 --repo "$GITHUB_REPOSITORY"
+            then
+              verified=true
+              break
+            fi
 
-          for asset in \
-            "dist/agent-governance-${RELEASE_VERSION}.zip" \
-            "dist/project-governance-bootstrap-${RELEASE_VERSION}.zip" \
-            "dist/SHA256SUMS"
-          do
-            gh release verify-asset "$tag" "$asset" \
-              --repo "$GITHUB_REPOSITORY"
+            sleep 3
           done
+
+          test "$verified" = "true"
