@@ -2,6 +2,11 @@
 
 > Historical STRICT release evidence. The v0.2 PRACTICAL/REVIEWED profile work is a new development line and is not validated by this checklist.
 
+> Evidence availability, 2026-09-24: the historical lab repositories have been
+> deleted. Checked items below record the original v0.1 review, not current
+> access to its private logs or records. See [validation status](docs/VALIDATION.md)
+> for the access limits and [current versions](README.md#versions) for releases.
+
 - [x] Independent source review, including safe-startup commissioning corrections, passed at `e85eac8` on 2026-09-20; hosted CI `35478614113` verified the same commit/tree. Live enforcement remains separate below.
 - [x] Root guide and Skill reference copy are byte-identical.
 - [x] Agent Skill frontmatter and standalone package extraction/reference resolution are tested; host-agent behavioral commissioning remains separate.
