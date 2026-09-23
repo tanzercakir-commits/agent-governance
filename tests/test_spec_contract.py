@@ -138,11 +138,19 @@ class SourceRegressions(unittest.TestCase):
         self.assertIn("not raw-byte or edit-history binding", self.text)
         self.assertIn("Missing/non-string API bodies", self.text)
 
-    def test_profile_notes_never_enter_generated_code_fences(self):
-        fenced = re.findall(r"\`\`\`[^\n]*\n(.*?)\n\`\`\`", self.text, re.S)
-        self.assertGreater(len(fenced), 0)
-        for block in fenced:
-            self.assertNotIn("> **Profile note:**", block)
+    def test_profile_notes_never_enter_embedded_workflows(self):
+        for workflow in (
+            "build-and-test.yml",
+            "governance-pr.yml",
+            "queue-finalize.yml",
+            "plan-amend-finalize.yml",
+            "governance-final.yml",
+            "main-audit.yml",
+        ):
+            with self.subTest(workflow=workflow):
+                body = section(self.text, f"### `.github/workflows/{workflow}`")
+                self.assertIn("```yaml", body)
+                self.assertNotIn("> **Profile note:**", body)
 
     def test_risk_proportional_profiles_do_not_force_strict_on_routine_work(self):
         for required in (
