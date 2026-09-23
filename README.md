@@ -52,6 +52,10 @@ A verifier may block the active task only for failed acceptance, a relevant
 required gate, material risk in the changed scope, or invalid required evidence.
 Other improvements are deferred instead of recursively enlarging the task.
 
+In PRACTICAL, priority is durable but not frozen forever: the owner may explicitly
+defer, cancel, reprioritize or supersede work with a recorded reason. Agents may
+not do that silently.
+
 ## What STRICT prepares
 
 | Project artifact | Purpose |
