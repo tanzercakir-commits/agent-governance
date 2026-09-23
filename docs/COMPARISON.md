@@ -36,9 +36,14 @@ recovery path when needed.
 
 ## The tradeoff is explicit
 
-These guarantees require a target implementation, GitHub setup and live
-commissioning. The source guide and Skill alone do not enforce them. The process
-fits projects that need durable scope and review gates; a small disposable script
-may not need that setup. Existing planning, coding and design skills can still
-guide day-to-day work. See [validation status](VALIDATION.md) for current evidence
-and [sources](SOURCES.md) for the protocol's platform references.
+The project now makes the tradeoff an explicit profile choice. PRACTICAL keeps
+ordinary development on the repository's real CI/review path; REVIEWED adds
+independent review for material engineering risk; STRICT retains the full
+provenance/finalization machinery.
+
+STRICT guarantees require a target implementation, GitHub setup and live
+commissioning. The source guide and Skill alone do not enforce them. Do not pay
+that cost for routine work without a concrete risk premise, and do not claim
+STRICT guarantees from a PRACTICAL setup. Existing planning, coding and design
+skills can still guide day-to-day work. See [validation status](VALIDATION.md)
+for current evidence and [sources](SOURCES.md) for platform references.
