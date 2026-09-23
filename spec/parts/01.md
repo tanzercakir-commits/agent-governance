@@ -47,6 +47,16 @@ The minimum durable surface is:
 - an owner-visible decision/deferred-work record;
 - the repository's existing branch protection, CI, tests, and ordinary PR review.
 
+PRACTICAL keeps task history durable without pretending priorities never change:
+
+- an agent may not silently reorder or skip work;
+- the owner may explicitly **DEFER**, **CANCEL**, **REPRIORITIZE**, or **SUPERSEDE**
+  a task when product reality changes;
+- record that decision durably with the reason and affected task IDs, then update
+  the operational queue in the same reviewed change;
+- a blocked task therefore does not have to freeze unrelated product work;
+- never erase the historical task or decision merely because it is no longer active.
+
 Do **not** introduce a dedicated governance App, immutable attempt refs, body-bound
 verifier payloads, extra status producers, or a parallel test framework merely
 because this guide can describe them.
