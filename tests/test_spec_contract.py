@@ -138,6 +138,24 @@ class SourceRegressions(unittest.TestCase):
         self.assertIn("not raw-byte or edit-history binding", self.text)
         self.assertIn("Missing/non-string API bodies", self.text)
 
+    def test_risk_proportional_profiles_do_not_force_strict_on_routine_work(self):
+        for required in (
+            "PRACTICAL — default for ordinary product development",
+            "REVIEWED — material but ordinary engineering risk",
+            "STRICT — high-assurance boundary",
+            "What may block the current task",
+            "Governance budget",
+            "non-blocking discovery does not expand the active task",
+            "Mandatory STRICT governance tests",
+            "Final STRICT bootstrap acceptance checklist",
+        ):
+            with self.subTest(required=required):
+                self.assertIn(required, self.text)
+        self.assertNotIn(
+            "Every non-trivial implementation or change separates implementation from verification.",
+            self.text,
+        )
+
 
 if __name__ == "__main__":
     unittest.main()
