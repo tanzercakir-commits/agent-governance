@@ -1,6 +1,6 @@
 # Public v0.1 STRICT release checklist
 
-> Historical STRICT release evidence. The v0.2 PRACTICAL/REVIEWED profile work is a new development line and is not validated by this checklist.
+> Historical STRICT release evidence. The v0.2 PRACTICAL/REVIEWED profile guidance is not validated by this checklist.
 
 > Evidence availability, 2026-09-24: the historical lab repositories have been
 > deleted. Checked items below record the original v0.1 review, not current

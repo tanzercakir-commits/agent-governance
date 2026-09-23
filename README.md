@@ -13,12 +13,12 @@ Created by [Tanzer](https://github.com/tanzercakir-commits) · [MIT license](LIC
 
 ## Versions
 
-- **Latest published release: [v0.1.1](https://github.com/tanzercakir-commits/agent-governance/releases/tag/v0.1.1).** It contains the original protocol, now called STRICT, and guidance for avoiding recurring agent mistakes.
-- **Current development version: [0.2.0-dev](VERSION).** The `main` branch adds PRACTICAL and REVIEWED alongside STRICT. **v0.2 has not been released.**
+- **Source version: [0.2.0](VERSION).** The v0.2 line adds PRACTICAL and REVIEWED alongside the original STRICT protocol.
+- **Published packages:** the [latest GitHub release](https://github.com/tanzercakir-commits/agent-governance/releases/latest) identifies the latest published version and provides source and standalone Skill ZIPs.
 
-This README describes `main`. Use its guide or Skill for the three profiles below.
-For a published snapshot, use the source or standalone Skill ZIP from v0.1.1
-and verify the download against that release's `SHA256SUMS`.
+This README describes the source in this checkout. `main` may be ahead of the
+latest published package. For a released snapshot, use the guide or Skill from
+that release and verify the download against its `SHA256SUMS`.
 
 ## What it helps with
 

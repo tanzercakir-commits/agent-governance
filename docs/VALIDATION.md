@@ -1,6 +1,6 @@
 # Validation status
 
-The repository's v0.2 development line adds risk-proportional PRACTICAL and
+The repository's v0.2 line adds risk-proportional PRACTICAL and
 REVIEWED guidance while retaining the v0.1 STRICT reference contracts. The
 reference Python contracts and their tests are executable STRICT specification
 evidence, not an installed runtime.
@@ -99,7 +99,7 @@ boundary. Every observed run and immutable record was retained.
 The live commissioning gates above were recorded as complete for v0.1. The
 latest published release and current development version are listed in the
 [README](../README.md#versions); this historical account does not validate the
-v0.2 development line. The public export excluded private development history;
+v0.2 profile guidance. The public export excluded private development history;
 its current availability is not established here.
 
 The disposable adoption fixture was initially configured by the agent to require
