@@ -1068,8 +1068,6 @@ on:
   workflow_dispatch:
     inputs:
       pr_number:
-> **Profile note:** The workflow and governance-package contracts in this part implement STRICT. They are not mandatory plumbing for PRACTICAL routine development.
-
         description: Pull request number
         required: true
         type: string
