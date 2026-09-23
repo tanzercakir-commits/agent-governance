@@ -148,6 +148,9 @@ class SourceRegressions(unittest.TestCase):
             "non-blocking discovery does not expand the active task",
             "Mandatory STRICT governance tests",
             "Final STRICT bootstrap acceptance checklist",
+            "DEFER",
+            "REPRIORITIZE",
+            "SUPERSEDE",
         ):
             with self.subTest(required=required):
                 self.assertIn(required, self.text)
