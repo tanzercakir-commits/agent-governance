@@ -40,6 +40,9 @@ Three source regressions also check the exact PR-head checkout in both build
 jobs, the policy job's evidence-reading
 permissions, and the hidden-ruleset-field attestation contract. These clause and
 workflow checks do not prove the corresponding live GitHub behavior.
+Release workflow source regressions require a draft's version and target commit
+to match the candidate before publication, and verify the actual tag only after
+publication. They do not themselves exercise GitHub's release lifecycle.
 An additional offline regression checks the three token steps against the
 reviewed action revision's required inputs; its fixture is included in source
 exports. It detects the `client-id`/`app-id` mismatch found during commissioning.
