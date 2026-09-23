@@ -1,4 +1,6 @@
-# Public v0.1 release checklist
+# Public v0.1 STRICT release checklist
+
+> Historical STRICT release evidence. The v0.2 PRACTICAL/REVIEWED profile work is a new development line and is not validated by this checklist.
 
 - [x] Independent source review, including safe-startup commissioning corrections, passed at `e85eac8` on 2026-09-20; hosted CI `35478614113` verified the same commit/tree. Live enforcement remains separate below.
 - [x] Root guide and Skill reference copy are byte-identical.
