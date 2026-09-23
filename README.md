@@ -13,12 +13,12 @@ Created by [Tanzer](https://github.com/tanzercakir-commits) · [MIT license](LIC
 
 ## Versions
 
-- **Latest published release: [v0.1.1](https://github.com/tanzercakir-commits/agent-governance/releases/tag/v0.1.1).** It contains the original protocol, now called STRICT, and guidance for avoiding recurring agent mistakes.
-- **Current development version: [0.2.0-dev](VERSION).** The `main` branch adds PRACTICAL and REVIEWED alongside STRICT. **v0.2 has not been released.**
+- **Source version: [0.2.0](VERSION).** The v0.2 line adds PRACTICAL and REVIEWED alongside the original STRICT protocol.
+- **Published packages:** the [latest GitHub release](https://github.com/tanzercakir-commits/agent-governance/releases/latest) identifies the latest published version and provides source and standalone Skill ZIPs.
 
-This README describes `main`. Use its guide or Skill for the three profiles below.
-For a published snapshot, use the source or standalone Skill ZIP from v0.1.1
-and verify the download against that release's `SHA256SUMS`.
+This README describes the source in this checkout. `main` may be ahead of the
+latest published package. For a released snapshot, use the guide or Skill from
+that release and verify the download against its `SHA256SUMS`.
 
 ## What it helps with
 
@@ -67,6 +67,27 @@ attempts remain part of the record. Those controls require project-specific setu
 Other skills can complement this after their rules are reconciled. This is a
 design focus, not a measured claim of better speed, cost or code quality.
 See the [comparison and sources](docs/COMPARISON.md) for more detail.
+
+## Safeguards for common agent mistakes
+
+The guide includes practices for the failures seen during development and review:
+
+| Failure pattern | Required practice or control |
+|---|---|
+| Wrong file or project context | Confirm the repository, branch, commit and real file paths before acting. |
+| Command or environment mistakes | Read the actual CI commands and check their prerequisites, inputs and identity. |
+| API or GitHub assumptions | Check the pinned interface and intended credential's view; missing fields are not proof of success. |
+| Incorrect tests or verification | Use actual contracts and outputs, with both valid and invalid examples. |
+| Security or protocol gaps | Check related entry points; STRICT binds acceptance to the exact commit, scope, authorized producer and failure history. |
+| Planning or coordination overhead | Choose checks by risk, defer unrelated improvements and reuse still-valid evidence. |
+| Weak diagnostics or unsafe publication | Keep sanitized error records; inspect exported files, commit attribution and release metadata. |
+| External delays or access limits | Use permitted, bounded readback; an uncertain write is not permission to retry it. |
+| Unknown causes | Preserve the observed facts and mark the cause unknown until evidence resolves it. |
+
+Most of these are rules for the agent and reviewer to follow, not automatic
+monitoring. Objective controls need implementation and testing in each receiving
+project. The incident counts that motivated them do not measure failure rates or
+prove fewer mistakes. See the [failure model and evidence limits](docs/FAILURE_MODES.md).
 
 ## Get started
 

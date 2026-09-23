@@ -66,6 +66,25 @@ class ReleaseWorkflowTests(unittest.TestCase):
         for forbidden in ("gh release create", "gh release edit", "gh release upload", "gh api --method"):
             self.assertNotIn(forbidden, post)
 
+    def test_new_release_binds_draft_metadata_before_checking_published_tag(self):
+        publish = self.text.index("- name: Publish immutable release")
+        draft = self.text[
+            self.text.index("- name: Verify draft release before immutable publication"):publish
+        ]
+        # A new draft has no backing tag until publication. Bind its metadata
+        # to the reviewed source, then require the actual published tag.
+        self.assertFalse("/git/ref/tags/" in self.text[:publish],
+                         "a new draft must not require its not-yet-published tag")
+        for required in (
+            "--json tagName", "--jq '.tagName'", ')" = "$tag"',
+            "--json targetCommitish", "--jq '.targetCommitish'", ')" = "$GITHUB_SHA"',
+        ):
+            self.assertIn(required, draft)
+        post = self.text[self.text.index("- name: Verify published immutable release"):]
+        self.assertIn('/git/ref/tags/${tag}', post)
+        self.assertIn('test "$tag_sha" = "$GITHUB_SHA"', post)
+        self.assertLess(post.index('/git/ref/tags/'), post.index('gh release verify '))
+
 
 if __name__ == "__main__":
     unittest.main()

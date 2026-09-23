@@ -1,6 +1,6 @@
 # Validation status
 
-The repository's v0.2 development line adds risk-proportional PRACTICAL and
+The repository's v0.2 line adds risk-proportional PRACTICAL and
 REVIEWED guidance while retaining the v0.1 STRICT reference contracts. The
 reference Python contracts and their tests are executable STRICT specification
 evidence, not an installed runtime.
@@ -40,6 +40,9 @@ Three source regressions also check the exact PR-head checkout in both build
 jobs, the policy job's evidence-reading
 permissions, and the hidden-ruleset-field attestation contract. These clause and
 workflow checks do not prove the corresponding live GitHub behavior.
+Release workflow source regressions require a draft's version and target commit
+to match the candidate before publication, and verify the actual tag only after
+publication. They do not themselves exercise GitHub's release lifecycle.
 An additional offline regression checks the three token steps against the
 reviewed action revision's required inputs; its fixture is included in source
 exports. It detects the `client-id`/`app-id` mismatch found during commissioning.
@@ -99,7 +102,7 @@ boundary. Every observed run and immutable record was retained.
 The live commissioning gates above were recorded as complete for v0.1. The
 latest published release and current development version are listed in the
 [README](../README.md#versions); this historical account does not validate the
-v0.2 development line. The public export excluded private development history;
+v0.2 profile guidance. The public export excluded private development history;
 its current availability is not established here.
 
 The disposable adoption fixture was initially configured by the agent to require

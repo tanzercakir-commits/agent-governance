@@ -153,11 +153,21 @@ jobs:
               --jq '.isDraft'
           )" = "true"
 
-          tag_sha="$(
-            gh api "/repos/${GITHUB_REPOSITORY}/git/ref/tags/${tag}" \
-              --jq '.object.sha'
-          )"
-          test "$tag_sha" = "$GITHUB_SHA"
+          # GitHub creates a new release's tag when the draft is published.
+          # Before that point, verify the draft's name and exact target commit.
+          test "$(
+            gh release view "$tag" \
+              --repo "$GITHUB_REPOSITORY" \
+              --json tagName \
+              --jq '.tagName'
+          )" = "$tag"
+
+          test "$(
+            gh release view "$tag" \
+              --repo "$GITHUB_REPOSITORY" \
+              --json targetCommitish \
+              --jq '.targetCommitish'
+          )" = "$GITHUB_SHA"
 
           expected="$(
             printf '%s\n' \
@@ -225,6 +235,12 @@ jobs:
               --json isDraft \
               --jq '.isDraft'
           )" = "false"
+
+          tag_sha="$(
+            gh api "/repos/${GITHUB_REPOSITORY}/git/ref/tags/${tag}" \
+              --jq '.object.sha'
+          )"
+          test "$tag_sha" = "$GITHUB_SHA"
 
           immutable=false
           for attempt in 1 2 3 4 5 6 7 8 9 10; do
