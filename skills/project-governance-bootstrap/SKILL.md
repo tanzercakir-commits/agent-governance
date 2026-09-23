@@ -1,6 +1,6 @@
 ---
 name: project-governance-bootstrap
-description: Prepare or audit repository governance for AI-assisted projects with an immutable plan, ordered tasks, independent review and exact-commit evidence. Use when the user requests project governance setup or an audit of an existing governance workflow.
+description: Prepare or audit risk-proportional repository governance for AI-assisted projects. Default ordinary product work to a practical CI/review loop and escalate to exact-commit fail-closed controls only for justified high-assurance boundaries.
 license: MIT
 ---
 
@@ -15,7 +15,18 @@ release. Report local preparation separately from live commissioning.
 
 ## Core stance
 
-Do not assume the coding agent will always remember or obey process. Put acceptance conditions in repository-owned artifacts, CI policy, durable evidence and protected-branch rules. Missing or ambiguous evidence fails closed.
+Governance must protect delivery, not become the dominant delivery workload.
+Choose the lightest profile that preserves the real risk boundary.
+
+- **PRACTICAL** is the default for ordinary product development.
+- **REVIEWED** adds independent exact-change review for material engineering risk.
+- **STRICT** uses the full fail-closed provenance/finalization protocol for
+  governance, security, auth, release, protected-state, destructive, or
+  owner-declared high-assurance boundaries.
+
+Do not install STRICT machinery merely because it is available. Missing or
+ambiguous evidence fails closed only for evidence that the selected profile
+actually requires.
 
 ## Required reference
 
@@ -23,27 +34,26 @@ Before making governance changes, read [`references/UNIVERSAL_PROJECT_GOVERNANCE
 
 ## Workflow
 
-1. Inspect the target repository without changing it. Preserve unrelated work.
-2. Discover all bootstrap variables that can be safely discovered. Ask only for unresolved values.
-3. Create a dedicated bootstrap branch; never bootstrap directly on the default branch.
-4. Instantiate the required normative files, governance package, workflows, project-CI adapter and ruleset payload from the reference guide.
-5. Treat `PLAN.md` as the immutable baseline. Configure `plans/amendments/` as append-only roadmap evolution; do not solve future discovery by making PLAN mutable.
-6. Keep TODO front-only/FIFO and PROGRESS completion-only. Normal task agents must not manually mutate either ledger.
-7. Pin external action revisions and bind CI/status evidence to trusted provenance and exact SHAs.
-8. Run local project CI, governance unit tests, self-checks, YAML parsing and placeholder scans.
-9. Request a read-only independent verifier on the exact stable bootstrap head. The verifier must not mutate state.
-10. Commission the live GitHub workflows on a draft PR, then install/re-read protected-branch rules only after the status producers exist.
-11. Exercise the first real task end-to-end. Treat any mismatch between the spec and live GitHub behavior as a commissioning bug, not permission to weaken evidence.
+1. Inspect the target repository without changing it. Preserve unrelated work and stricter controls.
+2. Classify the repository/change surface. Default to PRACTICAL unless a STRICT trigger exists or the owner explicitly requests high assurance.
+3. For PRACTICAL, reuse the project's existing branch protection, CI and review path. Add only missing plan/queue/progress/decision artifacts; do not create privileged governance infrastructure by default.
+4. For REVIEWED work, add one fresh read-only independent review of the stable exact diff and relevant evidence.
+5. For STRICT, follow the complete reference guide: dedicated bootstrap branch, normative files, governance package, pinned workflows, project-CI adapter, provenance/status bindings, independent verifier, rulesets and commissioning.
+6. Keep task scope bounded. A finding blocks only failed acceptance, a relevant required gate, material changed-scope risk, or invalid required evidence.
+7. Record non-blocking improvements as deferred work instead of extending the active task.
+8. In PRACTICAL, do not let a blocked front item freeze unrelated delivery: the owner may explicitly defer, cancel, reprioritize or supersede it with a durable decision. Agents never do this silently.
+9. Allow bounded batching of adjacent PRACTICAL routine tasks when each task's acceptance remains explicit. Do not silently batch REVIEWED/STRICT work.
+10. Prefer focused deterministic checks before broad review. Repeat a full audit only when new evidence invalidates it.
+11. Report the selected profile and why; never claim STRICT guarantees from a PRACTICAL setup.
 
 ## Non-negotiable behaviors
 
-- Do not rewrite a failed governance run into success.
-- Do not reuse verifier, CI, status, run, suite, PR or SHA evidence from another state.
-- Do not weaken tests/invariants/policy to get green.
-- Do not let the implementer self-approve.
-- Do not edit the baseline PLAN after bootstrap or an accepted amendment after merge.
-- Do not insert ordinary newly discovered work ahead of the current TODO front.
-- Do not claim completion from chat text. Require durable repository evidence.
+- Do not weaken tests, invariants, acceptance criteria, or existing stricter controls to get green.
+- Do not turn a useful but non-blocking improvement into a blocker for the current task.
+- Do not create new governance/evidence/benchmark machinery inside a task unless it closes a real blocker or the owner authorizes that scope.
+- When independent verification is required, do not let the implementer self-approve.
+- Under STRICT, do not rewrite a failed governance run into success or reuse verifier/CI/status/run/suite/PR/SHA evidence from another state.
+- Do not claim completion from chat text; use the durable evidence required by the selected profile.
 
 ## Existing repositories
 
@@ -51,4 +61,8 @@ If governance files already exist, reconcile deliberately and preserve stricter 
 
 ## Output
 
-At the end of bootstrap, report the exact branch/PR/head, local checks, independent-verifier result, live status producers, protected ruleset state, queue front, and any remaining blockers. Do not claim the project is governed until the full acceptance checklist in the reference guide passes.
+Always report the selected profile, the risk reason, the checks actually required,
+and remaining blockers. For STRICT, also report exact branch/PR/head, verifier
+result, live status producers, protected ruleset state, queue front, and full
+commissioning status. Do not claim STRICT governance until the final STRICT
+acceptance checklist in the reference guide passes.

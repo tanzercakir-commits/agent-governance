@@ -1,7 +1,14 @@
 # Validation status
 
-The repository provides the v0.1 guide and skill. The reference Python contracts
-and their tests are executable specification evidence, not an installed runtime.
+The repository's v0.2 development line adds risk-proportional PRACTICAL and
+REVIEWED guidance while retaining the v0.1 STRICT reference contracts. The
+reference Python contracts and their tests are executable STRICT specification
+evidence, not an installed runtime.
+
+Historical commissioning below validates the STRICT path. It is **not** evidence
+that the new PRACTICAL profile is faster, cheaper, or safer on every project; that
+profile intentionally relies on the receiving repository's real CI/review path
+and must be evaluated in that project's normal development flow.
 
 ## Reproducible local checks
 
@@ -26,7 +33,7 @@ constructs deterministic archives and verifies them after extraction. That is
 file portability evidence; it does not demonstrate that every coding agent
 correctly follows the skill.
 
-The source suite currently contains 36 tests. Three source regressions also check
+The source suite includes regression coverage for the profile boundary in addition to the existing protocol checks. Three source regressions also check
 the exact PR-head checkout in both build jobs, the policy job's evidence-reading
 permissions, and the hidden-ruleset-field attestation contract. These clause and
 workflow checks do not prove the corresponding live GitHub behavior.

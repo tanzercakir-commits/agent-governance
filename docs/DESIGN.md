@@ -6,6 +6,35 @@ Coding-agent systems usually focus on **agent behavior**: plan first, test first
 
 `agent-governance` adds a second layer: **repository acceptance semantics**. The repository should be able to answer, from durable state, whether a specific change is eligible to advance.
 
+## Risk-proportional operating profiles
+
+The core design rule is **assurance proportional to consequence**.
+
+- **PRACTICAL** is the default for ordinary reversible product work. Existing
+  project CI, focused tests, normal protected PR review and durable project notes
+  are usually enough.
+- **REVIEWED** adds a fresh independent read-only review when compatibility,
+  cross-module correctness or reversibility risk is material.
+- **STRICT** is the existing fail-closed reference protocol for governance,
+  security, authentication/authorization, release/provenance, protected-state
+  mutation, destructive migration and other declared high-assurance boundaries.
+
+The profiles are not quality rankings. They are different cost/risk contracts.
+A PRACTICAL project must not claim STRICT provenance guarantees; a STRICT project
+must not silently downgrade a protected boundary.
+
+## Governance budget
+
+A control earns its cost by reducing a concrete risk. Prefer focused deterministic
+checks before broad agent review, affected checks before full re-audits, and one
+final reconciliation instead of repeated full verification. If governance work
+repeatedly exceeds the product change while producing no material risk reduction,
+the process should be reclassified rather than normalized.
+
+A verifier may block only failed acceptance, a relevant required gate, material
+risk in changed scope, or invalid evidence required by the selected profile.
+Other improvements are backlog, not recursive task expansion.
+
 ## Operational reliability
 
 Operational reliability complements acceptance semantics. The guide also tells
@@ -56,7 +85,16 @@ The single `project_amendment` projection preserves pending bytes/order and appe
 
 ## Why FIFO
 
-FIFO is not universally optimal project management. It is used here because it removes a large class of agent discretion: an agent cannot silently cherry-pick the easiest task, skip a blocked task, or promote a newly discovered item ahead of authorized work. Exceptional priority changes belong in an explicit owner-authorized protocol.
+FIFO is not universally optimal project management. In STRICT v0.x it removes a
+large class of agent discretion: an agent cannot silently cherry-pick the easiest
+task, skip a blocked task, or promote a newly discovered item ahead of authorized
+work. Exceptional priority changes belong in an explicit owner-authorized
+protocol.
+
+PRACTICAL does not need to pretend real product priorities never change. The
+owner may record an ordinary defer/reprioritize/cancel decision in the project's
+normal durable tooling. That flexibility deliberately does **not** claim STRICT's
+immutable queue-transition guarantee.
 
 ## Why exact-head evidence
 

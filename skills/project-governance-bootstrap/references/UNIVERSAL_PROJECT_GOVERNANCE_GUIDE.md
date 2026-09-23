@@ -2,7 +2,7 @@
 
 > **Purpose:** Give this single file to the primary coding agent before work starts in a new repository.
 >
-> **Outcome:** The agent must bootstrap repository-owned, fail-closed governance around an immutable baseline plan, append-only plan amendments, FIFO TODO/PROGRESS ledgers, GitHub Actions gates, independent verification, protected-default-branch rules, and durable completion evidence before beginning ordinary implementation.
+> **Outcome:** The agent must choose the lightest governance profile that preserves the project's actual risk boundary. Ordinary product development defaults to **PRACTICAL** governance; **STRICT** fail-closed governance is reserved for changes whose failure would materially threaten security, release integrity, protected state, provenance, or another explicitly declared high-assurance boundary.
 >
 > **Important:** This is a project-bootstrap specification. It is intentionally language-agnostic. Project build and test commands remain a required project-specific input.
 
@@ -17,17 +17,115 @@ Your first actions are:
 1. Inspect the repository without changing it.
 2. Preserve all existing user work and unrelated modifications.
 3. Ask the owner only for values that cannot be discovered safely.
-4. Create a dedicated bootstrap branch. Never bootstrap directly on the default branch.
-5. Instantiate every required file listed below.
-6. Replace every `{{PLACEHOLDER}}` in generated repository artifacts; fail if any remain. Keep this source guide outside the target repository or exclude its exact filename from the scan.
-7. Add project-specific CI commands without weakening existing tests.
-8. Run the local governance tests and project CI.
-9. Request a read-only independent verifier audit.
-10. Open a draft bootstrap PR and commission the live GitHub workflows.
-11. Install and verify the protected-branch ruleset only after the required workflows exist on the default branch.
-12. Do not start the first foundation task until bootstrap is merged, audited, the ruleset is installed, and `self-check` passes.
+4. Choose the operating profile before adding machinery. Default to PRACTICAL unless a STRICT trigger below is present or the owner explicitly requests high assurance.
+5. Create a dedicated bootstrap branch. Never bootstrap directly on the default branch.
+6. For PRACTICAL, create or adapt only the common planning/queue/decision artifacts and the repository's real CI path. For STRICT, instantiate the complete reference layout below.
+7. Replace every `{{PLACEHOLDER}}` in generated repository artifacts; fail if any remain. Keep this source guide outside the target repository or exclude its exact filename from the scan.
+8. Add project-specific CI commands without weakening existing tests.
+9. Run the checks required by the chosen profile. A STRICT bootstrap always requires the full governance suite and a read-only independent verifier.
+10. Use the repository's normal protected PR path for PRACTICAL. For STRICT, commission the live governance workflows on a draft PR.
+11. Install dedicated governance App/ruleset/attempt-store controls only for STRICT, and only after their status producers exist on the default branch.
+12. Do not begin ordinary product work until the chosen profile's bootstrap acceptance conditions pass.
 
 If the repository already has governance files, reconcile them deliberately. Do not silently overwrite stricter controls.
+
+## 1A. Risk-proportional operating profiles
+
+Governance is a means to ship the correct product safely. It is not a second product
+that every feature must continuously expand. Verification cost must be proportional
+to the consequence and reversibility of the change being accepted.
+
+### PRACTICAL — default for ordinary product development
+
+Use PRACTICAL unless STRICT is explicitly selected or a strict trigger applies.
+
+The minimum durable surface is:
+
+- the real project plan or roadmap;
+- an ordered TODO/work queue;
+- a completion/progress record;
+- an owner-visible decision/deferred-work record;
+- the repository's existing branch protection, CI, tests, and ordinary PR review.
+
+PRACTICAL keeps task history durable without pretending priorities never change:
+
+- an agent may not silently reorder or skip work;
+- the owner may explicitly **DEFER**, **CANCEL**, **REPRIORITIZE**, or **SUPERSEDE**
+  a task when product reality changes;
+- record that decision durably with the reason and affected task IDs, then update
+  the operational queue in the same reviewed change;
+- a blocked task therefore does not have to freeze unrelated product work;
+- never erase the historical task or decision merely because it is no longer active.
+
+Do **not** introduce a dedicated governance App, immutable attempt refs, body-bound
+verifier payloads, extra status producers, or a parallel test framework merely
+because this guide can describe them.
+
+Routine loop:
+
+```text
+inspect -> implement -> focused tests -> project CI -> review -> merge -> next task
+```
+
+Adjacent small routine tasks may be completed in one bounded branch/PR when they
+touch the same area, preserve per-task acceptance evidence, and the owner has not
+required one-PR-per-task isolation.
+
+### REVIEWED — material but ordinary engineering risk
+
+Use REVIEWED for changes with meaningful compatibility, data-model, cross-module,
+or hard-to-reverse correctness risk that do not cross a STRICT boundary.
+
+REVIEWED adds a fresh independent read-only review of the stable exact diff and
+its relevant evidence. It does not automatically require the STRICT publication,
+attempt-store, finalizer, or release machinery.
+
+### STRICT — high-assurance boundary
+
+Use the full fail-closed protocol in sections 2–19 for governance/security
+controls, authentication/authorization, release publication, provenance/signing,
+protected-state mutation, destructive migration, irreversible data loss risk, or
+another owner-declared high-assurance boundary.
+
+A receiving repository may classify additional surfaces as STRICT. An agent may
+escalate a task to a higher tier when evidence warrants it; it must not silently
+downgrade an owner/project classification or an existing stricter control.
+
+### What may block the current task
+
+A finding blocks the current task only when at least one of these is true:
+
+1. a declared acceptance criterion is not met;
+2. a relevant regression, build, test, or required CI gate fails;
+3. the finding exposes a material correctness, security, data-loss, compatibility,
+   or release risk in the changed scope;
+4. the finding invalidates evidence required by the selected governance profile.
+
+Useful improvements outside that boundary are recorded as deferred work/backlog.
+They do not expand the current task merely because they were discovered during
+verification.
+
+Do not create a new benchmark suite, evidence format, governance subsystem,
+framework, or refactor inside a task unless its acceptance criteria require it,
+it is necessary to close a blocking defect, or the owner explicitly authorizes
+that scope.
+
+### Governance budget
+
+Prefer the cheapest evidence that can falsify the relevant failure mode:
+
+- deterministic focused tests before broad agent review;
+- affected checks before a full suite when wider evidence remains valid;
+- one final reconciliation instead of repeated full audits;
+- release-grade provenance only at release/high-risk boundaries.
+
+If governance work repeatedly costs more than the product change while finding no
+material risk, reclassify the process rather than normalizing the overhead.
+
+Sections 2–19 below are the **STRICT reference implementation** unless a section
+explicitly says otherwise. PRACTICAL or REVIEWED projects must not claim STRICT's
+attempt-history, provenance, or fail-closed publication guarantees unless they
+actually implement and commission those controls.
 
 ---
 
@@ -95,7 +193,12 @@ The initial `_No completed implementation tasks yet._` PROGRESS sentinel is vali
 
 ## 3. Required repository layout
 
-Create or adapt this structure:
+The complete layout below is the **STRICT** reference layout. A PRACTICAL project
+may keep its existing repository structure and add only the common plan/queue/
+progress/decision artifacts that are missing; it should not install unused
+privileged workflows or credentials.
+
+Create or adapt this structure for STRICT:
 
 ```text
 .
@@ -163,15 +266,15 @@ Read in full, in this order:
 6. the newest relevant records in `PROGRESS.md`
 7. relevant records in `DECISIONS.md`
 
-## Independent verification
+## Verification proportionality
 
-- Every non-trivial implementation or change separates implementation from verification.
-- The primary agent owns implementation.
-- A read-only independent verifier audits the stable exact change before completion is claimed.
-- The verifier reads the real requirements, exact diff, relevant tests, external gates, and current protected-branch state.
-- The verifier must not edit files, commit, push, comment, finalize, merge, or mutate external state.
-- Material findings block completion. Fix them and request a fresh exact-head verification.
-- If independent agents are unavailable, perform and disclose a clearly separated second-pass audit.
+- Classify work as PRACTICAL routine, REVIEWED, or STRICT before choosing the verification path.
+- PRACTICAL routine work does not require a separate independent verifier unless project policy or evidence raises the risk tier.
+- REVIEWED and STRICT work require a fresh read-only independent review of the stable exact change and relevant evidence.
+- The primary agent owns implementation; a required verifier must not edit files, commit, push, comment, finalize, merge, or mutate external state.
+- A verifier finding blocks the current task only when it violates acceptance, breaks a relevant required gate, exposes material risk in changed scope, or invalidates required evidence.
+- Non-blocking improvements go to deferred work/backlog; they do not enlarge the active task.
+- If a required independent agent is unavailable, perform and disclose a clearly separated second-pass audit unless the selected STRICT policy explicitly requires a distinct principal.
 
 ## Operational reliability
 
@@ -180,7 +283,7 @@ Read in full, in this order:
 - Check external interfaces at the pinned revision and with the intended credential role. Do not assume every token exposes the same fields or that an acknowledged write is immediately visible. Use only the protocol's permitted bounded readback.
 - Record each noticed mistake briefly: observed failure, impact, sanitized evidence, known cause or unknown, correction and any related earlier incident. Include verifier/helper mistakes; exclude expected negative tests. Preserve earlier entries and append resolutions. Never log credentials or private response bodies in public artifacts.
 - Before repeating a failed operation, identify the newly verified fact or concrete correction and whether repetition is permitted. Stop the unchanged affected action when neither exists; continue independent authorized work. An ambiguous remote write requires the existing read-only recovery path, never an invented retry or compensating write.
-- Before closing a fix, list the related callers, workflows, privileged entry points and consumers; explain which are affected. Verify the authorized affected boundaries together instead of rediscovering the same defect one entry point at a time. Use actual contracts and valid/invalid cases for tests and verifier expectations.
+- Before closing a correction that can plausibly share a root cause across callers, workflows, privileged entry points, or consumers, identify the affected boundaries and verify them together. Do not turn every local change into a repository-wide audit without a concrete propagation reason. Use actual contracts and valid/invalid cases for tests and verifier expectations.
 - Plan verification by affected boundary. Avoid duplicate full audits when their evidence remains applicable; preserve attribution and perform focused checks for new findings. Follow the task lifecycle's exact-head and canonical-body invalidation rules: a new head needs its own evidence, and a substantive body change needs refreshed policy and verifier acceptance. A body-only change does not itself require rerunning an unchanged-source build whose evidence still qualifies. Efficiency never permits reuse of invalid completion evidence.
 - Check actual account, reviewer and permission prerequisites early. Use existing authorization; ask only for missing authority or inputs. Do not introduce unnecessary dependencies, weaken receiving controls, or expand scope outside the queue/amendment rules.
 - Before public release, inspect the reviewed artifact, reachable history, commit attribution and release/ref metadata. Report preparation, execution and accepted completion distinctly; claim only outcomes supported by retained evidence.
@@ -194,7 +297,7 @@ Read in full, in this order:
 - `PROGRESS.md` uses push-front semantics. The newest verified record is first.
 - Only trusted automation mutates `TODO.md` and `PROGRESS.md` after bootstrap.
 - Never develop directly on `{{DEFAULT_BRANCH}}`.
-- Use one branch and pull request per queue-front task unless the owner explicitly changes scope.
+- In STRICT, use one branch and pull request per queue-front task unless the owner explicitly changes scope. In PRACTICAL, adjacent routine tasks may be batched when each task's acceptance evidence remains explicit; REVIEWED/STRICT tasks are not silently folded into a routine batch.
 - Never weaken requirements, invariants, tests, datasets, or evidence boundaries to make work pass.
 - Never reuse CI, verifier, finalizer, status, or ledger evidence from a different PR or commit SHA.
 - The implementer does not self-approve.
@@ -217,7 +320,7 @@ The complete execution and finalization protocol is normative in `MASTER_PROMPT.
 3. Accepted `plans/amendments/PA-*.md` files are immutable historical records; evolution adds new amendment files and never rewrites old ones.
 4. The effective roadmap is the baseline plan plus accepted amendments in numeric order.
 5. `TODO.md` contains pending work only and is consumed front-first.
-6. On the protected default branch, `PROGRESS.md` contains accepted, independently verified work only. A PR-branch ledger record is a candidate until final validation and authorized protected merge; its mere presence is not completion.
+6. On the protected default branch, `PROGRESS.md` contains accepted work only. Independent verification is required when the selected assurance tier requires it. Under STRICT, a PR-branch ledger record is a candidate until final validation and authorized protected merge; its mere presence is not completion.
 7. A task ID cannot exist in both TODO and PROGRESS.
 8. A completion transition changes TODO and PROGRESS atomically.
 9. Before PR-branch ref publication, a rejected completion or amendment attempt leaves that branch's governed ledgers byte-for-byte unchanged. After publication, failure preserves the one atomic candidate commit without accepting it; ambiguous publication is UNKNOWN and must not be retried. Neither finalizer mutates the default branch.
@@ -226,7 +329,7 @@ The complete execution and finalization protocol is normative in `MASTER_PROMPT.
 ## Evidence
 
 11. Completion evidence is bound to one exact implementation commit SHA.
-12. Implementation and verifier run identities are distinct.
+12. When independent verification is required, implementation and verifier run identities are distinct.
 13. Required checks come from one trusted workflow run and check suite.
 14. Status evidence is producer-bound, PR-bound, SHA-bound, and result-bound.
 15. Missing, skipped, cancelled, timed-out, stale, red, or inconclusive evidence is failure.
@@ -243,10 +346,12 @@ The complete execution and finalization protocol is normative in `MASTER_PROMPT.
 
 ## Change control
 
-23. Ordinary work discovered during a task is declared in the PR's canonical queue-additions section, independently verified, owner-authorized by the finalizer comment, appended to the back of TODO, and recorded in a new immutable plan-amendment file by the same trusted finalizer transition. It is never inserted ahead of the current front.
-24. Owner-initiated roadmap expansion uses the dedicated plan-amendment protocol. Version 0.x amendments are additive only: they may add new stable task IDs to the back of TODO, but may not rewrite, reorder, cancel, or silently weaken existing baseline/amendment tasks.
-25. Critical governance correctness/security repairs require explicit owner authorization, their own branch/PR, independent verification, and a decision record.
-26. Finalizers never rewrite partially finalized branches. Their durable admission history is retained under protected immutable attempt refs even if another writer changes the PR ref; a missing or changed candidate ref blocks completion. Recovery uses a fresh branch and PR from current default branch and entirely fresh evidence.
+23. Under STRICT, ordinary work discovered during a task is declared in the PR's canonical queue-additions section, independently verified, owner-authorized by the finalizer comment, appended to the back of TODO, and recorded in a new immutable plan-amendment file by the same trusted finalizer transition. It is never inserted ahead of the current front.
+24. Under STRICT v0.x, owner-initiated roadmap expansion uses the dedicated additive plan-amendment protocol and does not rewrite, reorder, cancel, or silently weaken existing baseline/amendment tasks. PRACTICAL projects may use ordinary owner-recorded defer/reprioritize/cancel decisions in their normal project tooling, but must not claim STRICT queue-transition guarantees for those operations.
+25. Critical governance correctness/security repairs are STRICT: they require explicit owner authorization, their own branch/PR, independent verification, and a decision record.
+26. STRICT finalizers never rewrite partially finalized branches. Their durable admission history is retained under protected immutable attempt refs even if another writer changes the PR ref; a missing or changed candidate ref blocks completion. Recovery uses a fresh branch and PR from current default branch and entirely fresh evidence.
+27. A non-blocking discovery does not expand the active task. Record it as deferred work unless it violates current acceptance, a relevant required gate, a material changed-scope risk, or required governance evidence.
+28. Governance machinery, benchmark expansion, evidence formats, and broad refactors are product scope too. Add them to the active task only when required to close a blocker or explicitly authorized by the owner.
 ```
 
 ---
@@ -255,6 +360,11 @@ The complete execution and finalization protocol is normative in `MASTER_PROMPT.
 
 ````markdown
 # {{PROJECT_NAME}} Execution Protocol
+
+> This execution/finalization protocol is the **STRICT** profile. PRACTICAL
+> routine work uses the shorter product loop defined in section 1A; REVIEWED
+> adds independent review without automatically inheriting STRICT publication
+> machinery.
 
 ## Roles
 
@@ -268,13 +378,13 @@ Works only on the FIFO-front task, owns the task branch, produces tests and exac
 
 ### Independent verifier
 
-Performs a fresh read-only audit of the exact implementation head. It cannot mutate repository or GitHub state.
+Required for REVIEWED and STRICT work. Performs a fresh read-only audit of the exact implementation head. It cannot mutate repository or GitHub state.
 
 ### Trusted finalizer
 
 Runs only from code already present on the protected default branch. For ordinary tasks it validates evidence, atomically pops TODO, push-fronts PROGRESS, records any verified queue additions as a new immutable plan amendment, creates the bot-owned ledger commit, and dispatches final validation. A separate trusted amendment finalizer applies owner-initiated additive amendments.
 
-## Task lifecycle
+## STRICT task lifecycle
 
 1. Confirm the front task and clean working state.
 2. Create one task branch from current `{{DEFAULT_BRANCH}}`.
@@ -440,6 +550,8 @@ git hash-object PLAN.md
 The bootstrap commit must already contain the real hash. The baseline PLAN and the pinned constant then freeze together; pinning is never a post-bootstrap edit. Roadmap evolution happens through new amendment files, never by changing this hash.
 
 ---
+> **Profile note:** Sections 7A–13 are part of the STRICT reference implementation unless stated otherwise. PRACTICAL projects may use ordinary owner-recorded roadmap and queue decisions with their existing CI/PR process, but must not claim the exact projection/provenance guarantees below.
+
 
 ## 7A. Append-only plan amendments
 
@@ -1703,6 +1815,8 @@ credentials, arbitrary exception messages or user-controlled diagnostic text.
 ### `finalize`
 
 It must:
+> **Profile note:** This part continues the STRICT finalization, audit, test, ruleset, and commissioning contract.
+
 
 1. accept only a new issue comment on an open, ready PR;
 2. require an owner/member-authorized association configured by policy;
@@ -1787,7 +1901,7 @@ On every default-branch push:
 
 ---
 
-## 15. Mandatory governance tests
+## 15. Mandatory STRICT governance tests
 
 The test suite must cover at least:
 
@@ -2041,7 +2155,7 @@ Treat any mismatch as a commissioning bug, not as permission to weaken evidence.
 
 ---
 
-## 19. Final bootstrap acceptance checklist
+## 19. Final STRICT bootstrap acceptance checklist
 
 The receiving agent may declare bootstrap complete only when all boxes are true:
 

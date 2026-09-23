@@ -138,6 +138,41 @@ class SourceRegressions(unittest.TestCase):
         self.assertIn("not raw-byte or edit-history binding", self.text)
         self.assertIn("Missing/non-string API bodies", self.text)
 
+    def test_profile_notes_never_enter_embedded_workflows(self):
+        for workflow in (
+            "build-and-test.yml",
+            "governance-pr.yml",
+            "queue-finalize.yml",
+            "plan-amend-finalize.yml",
+            "governance-final.yml",
+            "main-audit.yml",
+        ):
+            with self.subTest(workflow=workflow):
+                body = section(self.text, f"### `.github/workflows/{workflow}`")
+                self.assertIn("```yaml", body)
+                self.assertNotIn("> **Profile note:**", body)
+
+    def test_risk_proportional_profiles_do_not_force_strict_on_routine_work(self):
+        for required in (
+            "PRACTICAL — default for ordinary product development",
+            "REVIEWED — material but ordinary engineering risk",
+            "STRICT — high-assurance boundary",
+            "What may block the current task",
+            "Governance budget",
+            "non-blocking discovery does not expand the active task",
+            "Mandatory STRICT governance tests",
+            "Final STRICT bootstrap acceptance checklist",
+            "DEFER",
+            "REPRIORITIZE",
+            "SUPERSEDE",
+        ):
+            with self.subTest(required=required):
+                self.assertIn(required, self.text)
+        self.assertNotIn(
+            "Every non-trivial implementation or change separates implementation from verification.",
+            self.text,
+        )
+
 
 if __name__ == "__main__":
     unittest.main()
