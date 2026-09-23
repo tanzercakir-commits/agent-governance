@@ -1,10 +1,11 @@
 # agent-governance
 
-**A project preparation guide and Agent Skill for verifiable AI-assisted development.**
+**Risk-proportional project governance and an Agent Skill for verifiable AI-assisted development.**
 
-Give it to your coding agent before starting a project. It specifies how to turn
-your plan, task queue, tests and independent reviews into repository-owned
-completion rules, with evidence tied to the exact commit being accepted.
+Give it to your coding agent before starting a project. It first chooses the
+lightest governance profile that fits the real risk. Ordinary product development
+defaults to **PRACTICAL**; the existing fail-closed provenance/finalization
+machinery is the **STRICT** profile for genuinely high-assurance boundaries.
 
 Created by [Tanzer](https://github.com/tanzercakir-commits). [MIT licensed](LICENSE).
 
@@ -16,10 +17,12 @@ this request in your target project:
 
 ```text
 Read UNIVERSAL_PROJECT_GOVERNANCE_GUIDE.md in full.
-Inspect this repository and use the guide to prepare its governance.
-Preserve existing work and stricter controls. Ask only for missing project inputs.
-Work on a dedicated branch, run the checks and obtain independent verification.
-Present the prepared changes before any protected merge or settings change.
+Inspect this repository and choose the lightest justified profile.
+Default to PRACTICAL for ordinary product work; use STRICT only for explicit
+high-assurance boundaries or when I request it.
+Preserve existing work and stricter controls. Keep verification proportional to
+risk and do not expand a task for non-blocking improvements.
+Present prepared governance changes before any protected merge or settings change.
 ```
 
 Have your project's intended outcome and actual build/test command ready. The
@@ -37,7 +40,19 @@ folder and `LICENSE` together. Then ask it to use `project-governance-bootstrap`
 on your target repository. Skill directory discovery varies by agent; the
 single-file guide remains the direct-use option.
 
-## What it prepares
+## Operating profiles
+
+| Profile | Use it for | Default completion path |
+|---|---|---|
+| **PRACTICAL** | Ordinary, reversible product development | focused tests → project CI → normal review/merge |
+| **REVIEWED** | Material compatibility/cross-module/correctness risk | PRACTICAL + fresh independent read-only review |
+| **STRICT** | Governance/security/auth/release/provenance/destructive boundaries | full exact-head fail-closed protocol |
+
+A verifier may block the active task only for failed acceptance, a relevant
+required gate, material risk in the changed scope, or invalid required evidence.
+Other improvements are deferred instead of recursively enlarging the task.
+
+## What STRICT prepares
 
 | Project artifact | Purpose |
 |---|---|
@@ -61,7 +76,7 @@ of the project, so they can be checked across agent sessions.
 |---|---|
 | Preserve the original plan; record additions separately | New discoveries can extend the roadmap without silently rewriting earlier commitments |
 | Execute the front task and append new work at the back | Pending work cannot be quietly skipped or reordered |
-| Separate implementation from independent verification | A completion claim needs another review tied to the exact commit and full PR body |
+| Escalate verification with risk | Routine work stays routine; REVIEWED/STRICT work adds independent exact-change review, and STRICT binds acceptance to exact provenance |
 | Retain completion and failure evidence | A later green status cannot erase a failed attempt or replace missing evidence |
 
 You can pair this protocol with your preferred planning, coding or design skills.
@@ -74,14 +89,15 @@ implemented and commissioned target repository.**
 
 ## Scope and current status
 
-This is a **v0.1 specification and skill**, with executable reference
-contracts and regression tests. It is not an installed governance service.
-Copying the guide or skill alone does not enforce a repository's policy.
+The current branch is the **v0.2 development line**. The STRICT reference
+contracts and regression tests remain executable specification evidence; the new
+PRACTICAL/REVIEWED profile guidance deliberately does not claim STRICT's
+attempt-history or publication guarantees.
 
-The full protocol suits projects that need durable task history and explicit
-review gates. It adds setup and GitHub administration work; a small disposable
-script may not need that process. Project-specific tests and acceptance criteria
-remain your responsibility.
+The full STRICT protocol suits projects that genuinely need durable fail-closed
+provenance and protected finalization. Ordinary product repositories should start
+PRACTICAL and escalate only the changes whose risk justifies the extra machinery.
+Project-specific tests and acceptance criteria remain your responsibility.
 
 Local reference tests do not establish live GitHub enforcement. See
 [validation status](docs/VALIDATION.md) and the
