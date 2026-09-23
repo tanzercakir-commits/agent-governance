@@ -138,6 +138,12 @@ class SourceRegressions(unittest.TestCase):
         self.assertIn("not raw-byte or edit-history binding", self.text)
         self.assertIn("Missing/non-string API bodies", self.text)
 
+    def test_profile_notes_never_enter_generated_code_fences(self):
+        fenced = re.findall(r"\`\`\`[^\n]*\n(.*?)\n\`\`\`", self.text, re.S)
+        self.assertGreater(len(fenced), 0)
+        for block in fenced:
+            self.assertNotIn("> **Profile note:**", block)
+
     def test_risk_proportional_profiles_do_not_force_strict_on_routine_work(self):
         for required in (
             "PRACTICAL — default for ordinary product development",
