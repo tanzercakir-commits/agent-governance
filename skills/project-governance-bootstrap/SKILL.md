@@ -41,9 +41,10 @@ Before making governance changes, read [`references/UNIVERSAL_PROJECT_GOVERNANCE
 5. For STRICT, follow the complete reference guide: dedicated bootstrap branch, normative files, governance package, pinned workflows, project-CI adapter, provenance/status bindings, independent verifier, rulesets and commissioning.
 6. Keep task scope bounded. A finding blocks only failed acceptance, a relevant required gate, material changed-scope risk, or invalid required evidence.
 7. Record non-blocking improvements as deferred work instead of extending the active task.
-8. Allow bounded batching of adjacent PRACTICAL routine tasks when each task's acceptance remains explicit. Do not silently batch REVIEWED/STRICT work.
-9. Prefer focused deterministic checks before broad review. Repeat a full audit only when new evidence invalidates it.
-10. Report the selected profile and why; never claim STRICT guarantees from a PRACTICAL setup.
+8. In PRACTICAL, do not let a blocked front item freeze unrelated delivery: the owner may explicitly defer, cancel, reprioritize or supersede it with a durable decision. Agents never do this silently.
+9. Allow bounded batching of adjacent PRACTICAL routine tasks when each task's acceptance remains explicit. Do not silently batch REVIEWED/STRICT work.
+10. Prefer focused deterministic checks before broad review. Repeat a full audit only when new evidence invalidates it.
+11. Report the selected profile and why; never claim STRICT guarantees from a PRACTICAL setup.
 
 ## Non-negotiable behaviors
 
