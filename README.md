@@ -1,125 +1,122 @@
 # agent-governance
 
-**Risk-proportional project governance and an Agent Skill for verifiable AI-assisted development.**
+**A guide for keeping AI-assisted projects organized, with checks that match the risk.**
 
-Give it to your coding agent before starting a project. It first chooses the
-lightest governance profile that fits the real risk. Ordinary product development
-defaults to **PRACTICAL**; the existing fail-closed provenance/finalization
-machinery is the **STRICT** profile for genuinely high-assurance boundaries.
+Projects often outlive a single agent session. agent-governance helps a coding
+agent leave a clear record of the plan, the next task, decisions and completed
+work. It also defines what needs to be checked before a change is accepted.
 
-Created by [Tanzer](https://github.com/tanzercakir-commits). [MIT licensed](LICENSE).
+Small, reversible changes use the project's normal tests and review process.
+Changes with greater consequences receive more scrutiny.
 
-## Start here
+Created by [Tanzer](https://github.com/tanzercakir-commits) · [MIT license](LICENSE)
 
-You can use the [single-file guide](UNIVERSAL_PROJECT_GOVERNANCE_GUIDE.md)
-with a coding agent without installing anything. Give the agent the guide and
-this request in your target project:
+## Versions
+
+- **Latest published release: [v0.1.1](https://github.com/tanzercakir-commits/agent-governance/releases/tag/v0.1.1).** It contains the original protocol, now called STRICT, and guidance for avoiding recurring agent mistakes.
+- **Current development version: [0.2.0-dev](VERSION).** The `main` branch adds PRACTICAL and REVIEWED alongside STRICT. **v0.2 has not been released.**
+
+This README describes `main`. Use its guide or Skill for the three profiles below.
+For a published snapshot, use the source or standalone Skill ZIP from v0.1.1
+and verify the download against that release's `SHA256SUMS`.
+
+## What it helps with
+
+- **Continuity:** keep the plan, task queue, progress and decisions in the repository so another session can pick up the work.
+- **Clear completion:** agree on what “done” means and check it with the project's actual tests and CI.
+- **Appropriate review:** add an independent reviewer when the consequences justify it.
+- **Bounded scope:** put useful, unrelated improvements in the backlog instead of expanding the task being finished.
+
+## Three levels of checking
+
+| Profile | Typical work | What completion requires |
+|---|---|---|
+| **PRACTICAL** — the default | Features, fixes and refactors with limited, reversible impact | Focused tests, project CI and the normal review/merge process |
+| **REVIEWED** | Changes to shared interfaces or data models with material compatibility or correctness risk | PRACTICAL checks plus a fresh, independent review of the exact change |
+| **STRICT** | Governance rules, security, access control, release signing or destructive migrations | The full protocol: independent review, checks tied to the exact commit, authenticated records and controlled acceptance |
+
+Existing stricter project rules always apply. STRICT blocks completion when
+required evidence is missing or invalid; its guarantees require the complete
+controls to be implemented and tested in the receiving repository.
+
+In PRACTICAL, the owner can change priorities, defer or cancel work with a
+recorded reason. An agent cannot silently skip tasks or rewrite their history.
+Related small tasks can share a bounded PR when each keeps its own completion
+checks and the owner has not required separate PRs.
+
+A review should block work that misses agreed requirements, fails a required
+check, introduces material risk within the change, or lacks required evidence.
+Other improvements go into the backlog.
+
+## How it fits with other agent tools
+
+There is overlap: planning, tests and independent review are also part of other
+engineering skill packs. Their published descriptions emphasize different work:
+
+| Tools | Main focus |
+|---|---|
+| [Superpowers](https://github.com/obra/superpowers), [Matt Pocock's skills](https://github.com/mattpocock/skills), [Addy Osmani's skills](https://github.com/addyosmani/agent-skills) | Requirements, planning, implementation, testing and review workflows |
+| [Karpathy-inspired skills](https://github.com/multica-ai/andrej-karpathy-skills), [Ponytail](https://github.com/DietrichGebert/ponytail) | Clear assumptions, focused changes and avoiding unnecessary code |
+| [Anthropic Skills](https://github.com/anthropics/skills), [UI UX Pro Max](https://github.com/nextlevelbuilder/ui-ux-pro-max-skill) | Specialized tasks such as document creation and interface design |
+| [Graphify](https://github.com/Graphify-Labs/graphify) | Exploring relationships across code and documents through a knowledge graph |
+
+**Our strongest fit is a project that needs a durable record of what was agreed,
+what was completed and which evidence justified accepting it.** STRICT spells
+out how that evidence binds to the reviewed commit and scope, and how failed
+attempts remain part of the record. Those controls require project-specific setup.
+Other skills can complement this after their rules are reconciled. This is a
+design focus, not a measured claim of better speed, cost or code quality.
+See the [comparison and sources](docs/COMPARISON.md) for more detail.
+
+## Get started
+
+1. Open your target project and have its goal and real build/test command ready.
+2. Give your coding agent the [single-file guide](UNIVERSAL_PROJECT_GOVERNANCE_GUIDE.md).
+3. Ask it to prepare the project using this prompt:
 
 ```text
-Read UNIVERSAL_PROJECT_GOVERNANCE_GUIDE.md in full.
-Inspect this repository and choose the lightest justified profile.
-Default to PRACTICAL for ordinary product work; use STRICT only for explicit
-high-assurance boundaries or when I request it.
-Preserve existing work and stricter controls. Keep verification proportional to
-risk and do not expand a task for non-blocking improvements.
-Present prepared governance changes before any protected merge or settings change.
+Read UNIVERSAL_PROJECT_GOVERNANCE_GUIDE.md in full and inspect this project.
+Choose the lightest profile that fits the risk: PRACTICAL by default,
+REVIEWED for material engineering risk, and STRICT for high-assurance work.
+Preserve existing work and stricter project rules. Use our real tests and CI.
+Keep unrelated improvements in the backlog.
+Prepare changes on a separate branch and show the results before any
+protected merge or settings change.
 ```
 
-Have your project's intended outcome and actual build/test command ready. The
-agent prepares the project-specific files and workflows; installing branch
-protections and commissioning them on GitHub are later, explicit steps.
+PRACTICAL reuses the project's existing CI and adds only missing planning and
+tracking records. STRICT also prepares dedicated governance workflows and
+protections; installing those controls requires explicit owner authorization.
 
-Independent verification can come from a separate agent or a person; the protocol
-does not itself require a second GitHub account. Existing review requirements in
-the receiving repository must still be respected.
-
-If your agent supports Agent Skills, copy the entire
+**Using an Agent Skill:** copy the whole
 [`skills/project-governance-bootstrap/`](skills/project-governance-bootstrap/SKILL.md)
-folder into that agent's supported skills directory. Keep its `references/`
-folder and `LICENSE` together. Then ask it to use `project-governance-bootstrap`
-on your target repository. Skill directory discovery varies by agent; the
-single-file guide remains the direct-use option.
+folder into your agent's supported skills directory, including `references/`
+and `LICENSE`. Then ask the agent to use `project-governance-bootstrap`.
+The single-file guide works without installing a Skill.
 
-## Operating profiles
+An independent reviewer can be another agent or a person. The protocol does not
+require a second GitHub account, but existing repository review rules still apply.
 
-| Profile | Use it for | Default completion path |
-|---|---|---|
-| **PRACTICAL** | Ordinary, reversible product development | focused tests → project CI → normal review/merge |
-| **REVIEWED** | Material compatibility/cross-module/correctness risk | PRACTICAL + fresh independent read-only review |
-| **STRICT** | Governance/security/auth/release/provenance/destructive boundaries | full exact-head fail-closed protocol |
+## What is included, and what is verified
 
-A verifier may block the active task only for failed acceptance, a relevant
-required gate, material risk in the changed scope, or invalid required evidence.
-Other improvements are deferred instead of recursively enlarging the task.
+This repository includes the guide, the portable Skill, executable STRICT
+reference contracts, tests and packaging scripts. Copying the guide does not
+install an enforcement service: each project must supply its own tests and put
+the selected controls into practice.
 
-In PRACTICAL, priority is durable but not frozen forever: the owner may explicitly
-defer, cancel, reprioritize or supersede work with a recorded reason. Agents may
-not do that silently.
+Repository checks cover the reference code, generated guide consistency and
+package contents. They do not establish live enforcement in another project.
+Improvements in delivery speed, cost or safety from the new profiles have not
+been measured.
 
-## What STRICT prepares
-
-| Project artifact | Purpose |
-|---|---|
-| `PLAN.md` and append-only amendments | Preserve the original plan and record later scope |
-| `TODO.md` and `PROGRESS.md` | Track pending work in order and verified completion |
-| Agent instructions and execution protocol | Define implementation, review and owner responsibilities |
-| Governance validators and CI workflows | Check exact commit, PR scope and evidence provenance |
-| Protected-branch and attempt-history rules | Control acceptance and prevent failed-attempt replay |
-
-The core distinction is between **work claimed complete** and **work whose exact
-state has passed the required checks**. The guide defines that acceptance
-contract; each target repository must implement and commission it.
-
-## What makes it different
-
-agent-governance defines **what must be true before a repository accepts work as
-complete**. The plan, task order and verification evidence become explicit parts
-of the project, so they can be checked across agent sessions.
-
-| Design choice | Practical effect |
-|---|---|
-| Preserve the original plan; record additions separately | New discoveries can extend the roadmap without silently rewriting earlier commitments |
-| Execute the front task and append new work at the back | Pending work cannot be quietly skipped or reordered |
-| Escalate verification with risk | Routine work stays routine; REVIEWED/STRICT work adds independent exact-change review, and STRICT binds acceptance to exact provenance |
-| Retain completion and failure evidence | A later green status cannot erase a failed attempt or replace missing evidence |
-
-You can pair this protocol with your preferred planning, coding or design skills.
-Your project supplies its acceptance criteria and tests; agent-governance specifies
-how their evidence participates in the completion decision. See the
-[design distinctions](docs/COMPARISON.md) for more detail.
-
-These are the specified protocol's properties. **Live enforcement requires an
-implemented and commissioned target repository.**
-
-## Scope and current status
-
-The current branch is the **v0.2 development line**. The STRICT reference
-contracts and regression tests remain executable specification evidence; the new
-PRACTICAL/REVIEWED profile guidance deliberately does not claim STRICT's
-attempt-history or publication guarantees.
-
-The full STRICT protocol suits projects that genuinely need durable fail-closed
-provenance and protected finalization. Ordinary product repositories should start
-PRACTICAL and escalate only the changes whose risk justifies the extra machinery.
-Project-specific tests and acceptance criteria remain your responsibility.
-
-Local reference tests do not establish live GitHub enforcement. See
-[validation status](docs/VALIDATION.md) and the
-[release checklist](RELEASE_CHECKLIST.md) for the evidence and publication requirements.
-
-## Read further
-
-- [Complete specification](UNIVERSAL_PROJECT_GOVERNANCE_GUIDE.md)
-- [Design and trust boundaries](docs/DESIGN.md)
-- [Threat model and limitations](docs/THREAT_MODEL.md)
-- [Operational failure model and recurrence controls](docs/FAILURE_MODES.md)
-- [Design distinctions](docs/COMPARISON.md)
-- [Example plan amendment](examples/plan-amendments/PA-0001.md)
-- [Contributing](CONTRIBUTING.md)
+The old `agent-governance-lab` and `agent-governance-adoption-lab` GitHub
+repositories were deleted. The project does not depend on them to build, test
+or package, but their historical live-test records are no longer accessible.
+The [validation record](docs/VALIDATION.md) explains what remains verifiable.
 
 ## Check or package this repository
 
-Python 3.10 or later is sufficient; the repository checks use the standard library.
+Use Python 3.10 or later. These checks need only the standard library:
 
 ```bash
 python3 scripts/build_guide.py --check
@@ -129,6 +126,14 @@ python3 scripts/check_mutations.py
 python3 scripts/package_release.py --output dist
 ```
 
-The packaging command creates reproducible source and standalone skill ZIPs
-with SHA-256 checksums. It prepares local candidate artifacts; it does not
-publish a release or change repository visibility.
+Packaging produces source and standalone Skill ZIPs with SHA-256 checksums in
+`dist/`. It prepares local artifacts; publishing a release is a separate step.
+
+## More detail
+
+- [Full guide](UNIVERSAL_PROJECT_GOVERNANCE_GUIDE.md) — setup, workflows and the complete STRICT protocol
+- [Design](docs/DESIGN.md) and [design choices](docs/COMPARISON.md) — how the approach fits together
+- [Threat model](docs/THREAT_MODEL.md) — security assumptions and limits
+- [Common failure modes](docs/FAILURE_MODES.md) — recurring mistakes and preventive practices
+- [Validation record](docs/VALIDATION.md) and [historical v0.1 checklist](RELEASE_CHECKLIST.md) — checks and evidence availability
+- [Contributing](CONTRIBUTING.md) — how to propose and validate changes
