@@ -22,9 +22,9 @@ turn arbitrary input chunks into complete frames without network I/O.
 
 ## 2. Type and interface surface
 
-Define the selected component's caller-visible contract and the ownership it
-needs. This C++ header sketch has no method bodies; its private fields may be
-revised if the pseudocode exposes a different state model:
+Define the selected component's caller-visible contract and the minimum
+provisional private state needed to make ownership explicit. This C++ header
+sketch has no method bodies:
 
 ```cpp
 #pragma once
@@ -57,6 +57,9 @@ private:
     bool failed_ = false;
 };
 ```
+
+The private fields are a provisional state hypothesis, not part of the caller
+contract; they may change or disappear before implementation.
 
 The input span is borrowed only during `consume`; returned frames own their
 payload bytes. Partial header/payload bytes belong to the decoder. Oversize
