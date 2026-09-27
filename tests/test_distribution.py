@@ -9,6 +9,8 @@ from scripts.package_release import build
 
 class DistributionTests(unittest.TestCase):
     def test_reproducible_archives_and_private_history_exclusion(self):
+        root = Path(__file__).resolve().parents[1]
+        version = (root / "VERSION").read_text(encoding="ascii").strip()
         with tempfile.TemporaryDirectory() as directory:
             first = build(Path(directory) / "first")
             second = build(Path(directory) / "second")
@@ -17,6 +19,11 @@ class DistributionTests(unittest.TestCase):
             with ZipFile(first[0]) as archive:
                 names = archive.namelist()
                 self.assertTrue(any(name.endswith("/LICENSE") for name in names))
+                for path in ("methods/README.md", "methods/low-level-contract/METHOD.md"):
+                    with self.subTest(path=path):
+                        archived = f"agent-governance-{version}/{path}"
+                        self.assertIn(archived, names)
+                        self.assertEqual(archive.read(archived), (root / path).read_bytes())
                 self.assertTrue(any(
                     name.endswith("/.github/workflows/release.yml")
                     for name in names

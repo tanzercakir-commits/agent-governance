@@ -23,6 +23,22 @@ The profiles are not quality rankings. They are different cost/risk contracts.
 A PRACTICAL project must not claim STRICT provenance guarantees; a STRICT project
 must not silently downgrade a protected boundary.
 
+## Optional methods are a separate choice
+
+The governance profile decides acceptance controls. A method decides the working
+sequence for a task only when the owner explicitly selects it in existing
+authorized scope or a decision record. For example, the
+[Low-Level Contract Method](../methods/low-level-contract/METHOD.md) develops
+one observable boundary from topology and interface through tests, verification
+and audit. It is not a fourth profile or a repository-wide default.
+
+Governance-conformance and method-conformance are distinct. A task may satisfy
+governance without selecting a method; selecting a method adds its working
+contract for that task without weakening the selected governance profile.
+The method's audit stage uses independent review when governance requires it.
+Project CI may consume relevant method evidence, but inactive methods impose no
+artifact checks or extra required status on receiving projects.
+
 ## Governance budget
 
 A control earns its cost by reducing a concrete risk. Prefer focused deterministic

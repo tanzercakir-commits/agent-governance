@@ -26,6 +26,21 @@ that release and verify the download against its `SHA256SUMS`.
 - **Clear completion:** agree on what “done” means and check it with the project's actual tests and CI.
 - **Appropriate review:** add an independent reviewer when the consequences justify it.
 - **Bounded scope:** put useful, unrelated improvements in the backlog instead of expanding the task being finished.
+- **Optional working methods:** use a structured workflow when a task benefits from one; browse the [methods catalog](methods/README.md).
+
+## Optional working methods
+
+Governance tells you what must remain true. Methods offer optional ways to do
+the work.
+
+| Method | When it helps | Status |
+|---|---|---|
+| [Low-Level Contract](methods/README.md#low-level-contract-method) | Developing a complex component through small, observable behavior boundaries | Optional |
+
+An owner selects a method for a bounded task in its existing authorized scope or
+decision record. Without selection, there are no method requirements. Browse the
+[methods catalog](methods/README.md) for the workflow and its limits. A method
+does not change the selected governance profile or add a required CI status.
 
 ## Three levels of checking
 

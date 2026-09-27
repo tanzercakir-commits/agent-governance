@@ -17,6 +17,8 @@ PUBLIC_FILES = (
     "docs/COMPARISON.md", "docs/SOURCES.md", "docs/VALIDATION.md", "docs/FAILURE_MODES.md",
     "spec/README.md", "plans/amendments/README.md",
     "examples/plan-amendments/PA-0001.md",
+    "methods/README.md",
+    "methods/low-level-contract/METHOD.md",
     "tests/fixtures/app-token-input-contract.json",
 )
 PUBLIC_PATTERNS = ("spec/parts/*.md", "spec/reference/*.py", "scripts/*.py", "tests/*.py",
