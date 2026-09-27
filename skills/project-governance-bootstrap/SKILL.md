@@ -28,6 +28,15 @@ Do not install STRICT machinery merely because it is available. Missing or
 ambiguous evidence fails closed only for evidence that the selected profile
 actually requires.
 
+## Optional working methods
+
+After choosing the governance profile, point the owner to the source project's
+[working methods catalog](https://github.com/tanzercakir-commits/agent-governance/blob/main/methods/README.md)
+as an optional choice. It includes the Low-Level Contract Method for developing
+one observable boundary at a time. Discovery does not activate the method: only
+an explicit owner selection in the task's existing authorized scope or decision
+record does. A method never changes the selected governance profile.
+
 ## Required reference
 
 Before making governance changes, read [`references/UNIVERSAL_PROJECT_GOVERNANCE_GUIDE.md`](references/UNIVERSAL_PROJECT_GOVERNANCE_GUIDE.md) in full. It is the normative bootstrap specification bundled with this skill.

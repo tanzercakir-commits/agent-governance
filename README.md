@@ -26,6 +26,21 @@ that release and verify the download against its `SHA256SUMS`.
 - **Clear completion:** agree on what “done” means and check it with the project's actual tests and CI.
 - **Appropriate review:** add an independent reviewer when the consequences justify it.
 - **Bounded scope:** put useful, unrelated improvements in the backlog instead of expanding the task being finished.
+- **Optional working methods:** use a structured workflow when a task benefits from one; browse the [methods catalog](methods/README.md).
+
+## Optional working methods
+
+Governance tells you what must remain true. Methods offer optional ways to do
+the work.
+
+| Method | When it helps | Status |
+|---|---|---|
+| [Low-Level Contract](methods/README.md#low-level-contract-method) | Developing a complex component through small, observable behavior boundaries | Optional |
+
+An owner selects a method for a bounded task in its existing authorized scope or
+decision record. Without selection, there are no method requirements. Browse the
+[methods catalog](methods/README.md) for the workflow and its limits. A method
+does not change the selected governance profile or add a required CI status.
 
 ## Three levels of checking
 
@@ -67,20 +82,6 @@ attempts remain part of the record. Those controls require project-specific setu
 Other skills can complement this after their rules are reconciled. This is a
 design focus, not a measured claim of better speed, cost or code quality.
 See the [comparison and sources](docs/COMPARISON.md) for more detail.
-
-## Optional working methods
-
-The [Low-Level Contract Method](methods/low-level-contract/METHOD.md) is an
-optional way to develop a low-level component through topology, type and
-interface surface, behavioral pseudocode, test contract, implementation,
-executable verification, audit, and the next demonstrated boundary. An owner
-selects it for a bounded task through the project's existing authorized task
-scope or decision record. No selection means no method requirements.
-
-Methods describe **how** work is done; PRACTICAL, REVIEWED and STRICT define
-**what** must be true to accept it. Method evidence may help satisfy a project
-gate, but method-conformance does not replace governance-conformance. The
-method does not add a required CI status or alter the universal guide.
 
 ## Safeguards for common agent mistakes
 
