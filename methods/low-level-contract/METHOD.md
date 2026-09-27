@@ -77,3 +77,6 @@ claims depend on the receiving project's governance controls.
   unrelated improvements go to the project's normal backlog.
 - The stages can repeat for another boundary within the same authorized task.
   A future task requires its own explicit selection of this method.
+
+For a concrete walk-through of the topology, interface-only, pseudocode and
+test-contract stages, see the [incremental frame decoder example](examples/frame-decoder.md).

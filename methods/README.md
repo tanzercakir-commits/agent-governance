@@ -19,3 +19,5 @@ Flow: topology hypothesis → type and interface surface → behavioral pseudoco
 demonstrated boundary.
 
 [Read the Low-Level Contract Method](low-level-contract/METHOD.md).
+See the [worked frame decoder example](low-level-contract/examples/frame-decoder.md)
+for one boundary traced from topology hypothesis to test contract.
