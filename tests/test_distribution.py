@@ -19,7 +19,11 @@ class DistributionTests(unittest.TestCase):
             with ZipFile(first[0]) as archive:
                 names = archive.namelist()
                 self.assertTrue(any(name.endswith("/LICENSE") for name in names))
-                for path in ("methods/README.md", "methods/low-level-contract/METHOD.md"):
+                for path in (
+                    "methods/README.md",
+                    "methods/low-level-contract/METHOD.md",
+                    "methods/low-level-contract/examples/frame-decoder.md",
+                ):
                     with self.subTest(path=path):
                         archived = f"agent-governance-{version}/{path}"
                         self.assertIn(archived, names)
