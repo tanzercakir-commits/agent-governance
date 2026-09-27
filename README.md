@@ -68,6 +68,20 @@ Other skills can complement this after their rules are reconciled. This is a
 design focus, not a measured claim of better speed, cost or code quality.
 See the [comparison and sources](docs/COMPARISON.md) for more detail.
 
+## Optional working methods
+
+The [Low-Level Contract Method](methods/low-level-contract/METHOD.md) is an
+optional way to develop a low-level component through topology, type and
+interface surface, behavioral pseudocode, test contract, implementation,
+executable verification, audit, and the next demonstrated boundary. An owner
+selects it for a bounded task through the project's existing authorized task
+scope or decision record. No selection means no method requirements.
+
+Methods describe **how** work is done; PRACTICAL, REVIEWED and STRICT define
+**what** must be true to accept it. Method evidence may help satisfy a project
+gate, but method-conformance does not replace governance-conformance. The
+method does not add a required CI status or alter the universal guide.
+
 ## Safeguards for common agent mistakes
 
 The guide includes practices for the failures seen during development and review:
