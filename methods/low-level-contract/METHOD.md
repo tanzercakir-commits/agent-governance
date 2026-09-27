@@ -35,27 +35,31 @@ and provenance under its own rules, regardless of the method used to produce it.
 
 ## Loop for one implementation boundary
 
-Choose a small externally observable change and work through the stages in
-order. Keep the contract and evidence in the task's existing notes, PR, code,
-and tests as appropriate; this method does not prescribe a directory or a
-separate file for each stage.
+First map the component as a whole, then select one small externally observable
+boundary to deepen. Work through the stages in order. Keep the contract and
+evidence in the task's existing notes, PR, code, and tests as appropriate; this
+method does not prescribe a directory or a separate file for each stage.
+
+**Do not implement before stages 1–4 establish a reviewable contract for the
+selected boundary.**
+
+**Work one demonstrated boundary at a time; do not generalize until a second
+real use justifies the shared abstraction.**
 
 | Stage | Record or demonstrate before moving on |
 | --- | --- |
-| 1. Topology | Identify the existing components, ownership, calls, state and lifetime that the boundary touches. Name the next externally observable change. |
-| 2. Type and interface surface | State the inputs, outputs, states, errors and ownership/lifetime guarantees visible to callers. Use headers where the language has them; otherwise use its actual public type or API surface. |
-| 3. Behavioral pseudocode | Walk the success, failure, timeout and cleanup paths that matter for this boundary. State ordering and concurrency behavior where relevant. |
-| 4. Test contract | Map the observable paths and invariants to focused tests, including a meaningful invalid or edge case. Identify the real environment or dependency needed to run them. |
-| 5. Implementation | Implement this boundary against the recorded contract. Avoid extending neighboring interfaces or inventing a general hierarchy without a demonstrated second use. |
+| 1. Topology hypothesis | Map the component from the top down before implementing it: major types/components and their ownership, calls, state and lifetime relationships. This map is provisional. A proposed component may move, become private or disappear if no demonstrated behavior needs it. Select one concrete node or boundary to deepen next. |
+| 2. Type and interface surface | For that boundary, define only the types and caller-visible interface: inputs, outputs, states, errors, ownership and lifetime. Where the language uses headers, make a header/type-surface pass without implementation bodies. Do not generalize neighboring interfaces or add speculative abstractions. |
+| 3. Behavioral pseudocode | Before implementation, describe relevant operations in language-neutral pseudocode: success, failure, timeout, cleanup, state transitions, ordering and concurrency where applicable. If a path exposes a bad interface or missing invariant, revise the type/interface surface before continuing. |
+| 4. Test contract | Convert the pseudocode and invariants into explicit executable test expectations before implementation. Cover every material behavioral path, including meaningful invalid/edge cases and required real-environment checks. State what cannot yet be verified. |
+| 5. Implementation | Implement this boundary against the recorded contract. Do not preserve a proposed class, adapter or other abstraction merely because it appeared in the topology hypothesis; remove or reshape it if the demonstrated behavior does not need it. |
 | 6. Executable verification | Run the focused tests and the project's required build/CI checks. Run extra tools, such as sanitizers, when they address an actual risk in the boundary; record what ran, its result, and what could not be verified. |
 | 7. Audit | Compare the implemented behavior and executable evidence with the type surface, pseudocode and test contract. Resolve material mismatches; use an independent reviewer when the selected governance profile or project rules require one. |
 | 8. Next demonstrated boundary | Record what the current work proves, what remains unproven and the next concrete pressure on the design. Generalize only when observed boundaries justify the shared contract. |
 
-Before implementation, stages 1–4 MUST establish a reviewable behavioral
-contract for the chosen boundary. If implementation reveals a mistaken
-assumption, revise the affected contract and tests, then verify the revised
-behavior. A green test result for an obsolete contract does not close the
-boundary.
+If implementation reveals a mistaken assumption, revise the affected topology,
+interface, pseudocode and tests, then verify the revised behavior. A green test
+result for an obsolete contract does not close the boundary.
 
 The audit MUST distinguish observed results from expectations and identify
 verification that could not run. Completion of this method does not itself
