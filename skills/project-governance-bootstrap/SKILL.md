@@ -31,7 +31,7 @@ actually requires.
 ## Optional working methods
 
 After choosing the governance profile, point the owner to the source project's
-[working methods catalog](https://github.com/tanzercakir-commits/agent-governance/blob/main/methods/README.md)
+[working methods catalog snapshot](https://github.com/tanzercakir-commits/agent-governance/blob/a63f04336484564b5c8b98e1ff0964d22a48b135/methods/README.md)
 as an optional choice. It includes the Low-Level Contract Method for developing
 one observable boundary at a time. Discovery does not activate the method: only
 an explicit owner selection in the task's existing authorized scope or decision
