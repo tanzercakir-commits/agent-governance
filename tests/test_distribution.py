@@ -23,6 +23,7 @@ class DistributionTests(unittest.TestCase):
                     "methods/README.md",
                     "methods/low-level-contract/METHOD.md",
                     "methods/low-level-contract/examples/frame-decoder.md",
+                    "methods/low-level-contract/examples/car-startup.md",
                 ):
                     with self.subTest(path=path):
                         archived = f"agent-governance-{version}/{path}"

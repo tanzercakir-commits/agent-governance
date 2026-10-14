@@ -19,5 +19,10 @@ Flow: topology hypothesis → type and interface surface → behavioral pseudoco
 demonstrated boundary.
 
 [Read the Low-Level Contract Method](low-level-contract/METHOD.md).
-See the [worked frame decoder example](low-level-contract/examples/frame-decoder.md)
-for one boundary traced from topology hypothesis to test contract.
+
+- [Car startup](low-level-contract/examples/car-startup.md): start with a
+  whole-system requirement, derive Engine's low-level contract, and plan
+  verification back up through Car's real composition. Stages 1–4 are worked;
+  implementation and executable evidence remain pending.
+- [Frame decoder](low-level-contract/examples/frame-decoder.md): trace one
+  byte-processing boundary from topology hypothesis to test contract.
