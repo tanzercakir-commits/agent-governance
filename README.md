@@ -42,6 +42,12 @@ decision record. Without selection, there are no method requirements. Browse the
 [methods catalog](methods/README.md) for the workflow and its limits. A method
 does not change the selected governance profile or add a required CI status.
 
+For a top-down walk-through, see the [Car startup example](methods/low-level-contract/examples/car-startup.md):
+follow Car's readiness requirement down to Engine's types, outcomes, pseudocode
+and test contract, then plan verification back up through the composed system.
+The [frame decoder example](methods/low-level-contract/examples/frame-decoder.md)
+shows the first four stages for a byte-processing boundary.
+
 ## Three levels of checking
 
 | Profile | Typical work | What completion requires |
